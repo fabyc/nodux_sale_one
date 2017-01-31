@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!-- This file is part sale_pos module for Tryton.
+The COPYRIGHT file at the top level of this repository contains the full copyright notices and license terms. -->
+<form string="Pos Cash Sales" col="4">
+    <field name="lines" colspan="2"
+        view_ids="nodux_sale_one.sale_line_view_tree,nodux_sale_one.sale_line_view_form"/>
+    <notebook colspan="2">
+        <page string="Sale" col="2" id="sale">
+            <label name="reference"/>
+            <field name="reference"/>
+            <separator colspan="2" id="party_info"/>
+            <label name="party"/>
+            <field name="party"/>
+            <label name="sale_date"/>
+            <field name="sale_date"/>
+            <separator colspan="2" id="amount_info"/>
+            <label name="untaxed_amount"/>
+            <field name="untaxed_amount"/>
+            <label name="tax_amount"/>
+            <field name="tax_amount"/>
+            <label name="total_amount"/>
+            <field name="total_amount"/>
+            <separator colspan="2" id="payment_info"/>
+            <label name="paid_amount"/>
+            <field name="paid_amount"/>
+            <label name="residual_amount"/>
+            <field name="residual_amount"/>
+        </page>
+        <page string="Comment" id="comment" col="2">
+            <field name="comment"/>
+        </page>
+        <page string="Other Info" id="other">
+            <label name="company"/>
+            <field name="company"/>
+            <label name="currency"/>
+            <field name="currency"/>
+        </page>
+    </notebook>
+    <group id="cash" colspan="2">
+        <button name="quote" string="Quote" icon="tryton-go-next"/>
+        <button name="wizard_sale_payment" string="_Pay"
+            icon="tryton-go-next"/>
+    </group>
+    <label name="state"/>
+    <field name="state"/>
+</form>

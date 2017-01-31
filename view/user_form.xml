@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<data>
+    <xpath expr="/form/notebook/page[@id='preferences']" position="after">
+        <page string="Sale Limit" id="sales"
+            states="{'invisible': ~Eval('id').in_([1])}">
+            <label name="limit"/>
+            <field name="limit"/>
+            <label name="unlimited"/>
+            <field name="unlimited"/>
+        </page>
+    </xpath>
+</data>

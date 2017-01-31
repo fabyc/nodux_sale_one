@@ -1,0 +1,650 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:company.company,logo:"
+msgid "Logo de su empresa"
+msgstr ""
+
+msgctxt "field:company.company,sequence_sale:"
+msgid "Sequence Sale"
+msgstr "Secuencia de Venta"
+
+msgctxt "field:nodux_sale_one.print_report_sale.start,company:"
+msgid "Company"
+msgstr "Empresa"
+
+msgctxt "field:nodux_sale_one.print_report_sale.start,date:"
+msgid "Sale Date"
+msgstr "Fecha de Venta"
+
+msgctxt "field:nodux_sale_one.print_report_sale.start,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:res.user,limit:"
+msgid "Sales Limit"
+msgstr "Límite de Ventas"
+
+msgctxt "field:res.user,unlimited:"
+msgid "Unlimited Sales"
+msgstr "Ventas Ilimitadas"
+
+msgctxt "field:sale.line,amount:"
+msgid "Amount"
+msgstr "Subtotal"
+
+msgctxt "field:sale.line,amount_w_tax:"
+msgid "Amount with Tax"
+msgstr "Total con Impuestos"
+
+msgctxt "field:sale.line,create_date:"
+msgid "Create Date"
+msgstr "Fecha de Creación"
+
+msgctxt "field:sale.line,create_uid:"
+msgid "Create User"
+msgstr "Usuario creación"
+
+msgctxt "field:sale.line,currency:"
+msgid "Currency"
+msgstr "Moneda"
+
+msgctxt "field:sale.line,currency_digits:"
+msgid "Currency Digits"
+msgstr "Decimales Moneda"
+
+msgctxt "field:sale.line,description:"
+msgid "Description"
+msgstr "Descripción"
+
+msgctxt "field:sale.line,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:sale.line,product:"
+msgid "Product"
+msgstr "Productos"
+
+msgctxt "field:sale.line,product_uom_category:"
+msgid "Product Uom Category"
+msgstr "Categoría de UdM de producto"
+
+msgctxt "field:sale.line,quantity:"
+msgid "Quantity"
+msgstr "Cantidad"
+
+msgctxt "field:sale.line,rec_name:"
+msgid "Name"
+msgstr "Nombre"
+
+msgctxt "field:sale.line,sale:"
+msgid "Sale"
+msgstr "Venta"
+
+msgctxt "field:sale.line,sequence:"
+msgid "Sequence"
+msgstr "Secuencia"
+
+msgctxt "field:sale.line,type:"
+msgid "Type"
+msgstr "Tipo"
+
+msgctxt "field:sale.line,unit:"
+msgid "Unit"
+msgstr "Unidad"
+
+msgctxt "field:sale.line,unit_digits:"
+msgid "Unit Digits"
+msgstr "Decimales de Unidad"
+
+msgctxt "field:sale.line,unit_price:"
+msgid "Unit Price"
+msgstr "Precio Unitario"
+
+msgctxt "field:sale.line,unit_price_w_tax:"
+msgid "Unit Price with Tax"
+msgstr "Precio unitario con impuestos"
+
+msgctxt "field:sale.line,write_date:"
+msgid "Write Date"
+msgstr "Fecha de Modificación"
+
+msgctxt "field:sale.line,write_uid:"
+msgid "Write User"
+msgstr "Modificado por Usuario"
+
+msgctxt "field:sale.payment.form,create_date:"
+msgid "Create Date"
+msgstr "Fecha de Creación"
+
+msgctxt "field:sale.payment.form,create_uid:"
+msgid "Create User"
+msgstr "Usuario creación"
+
+msgctxt "field:sale.payment.form,currency_digits:"
+msgid "Currency Digits"
+msgstr "Decimales de Moneda"
+
+msgctxt "field:sale.payment.form,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:sale.payment.form,party:"
+msgid "Party"
+msgstr "Cliente"
+
+msgctxt "field:sale.payment.form,payment_amount:"
+msgid "Payment amount"
+msgstr "Total  a Pagar"
+
+msgctxt "field:sale.payment.form,rec_name:"
+msgid "Name"
+msgstr "Nombre"
+
+msgctxt "field:sale.payment.form,write_date:"
+msgid "Write Date"
+msgstr "Fecha de Modificación"
+
+msgctxt "field:sale.payment.form,write_uid:"
+msgid "Write User"
+msgstr "Modificado por Usuario"
+
+msgctxt "field:sale.sale,comment:"
+msgid "Comment"
+msgstr "Comentario"
+
+msgctxt "field:sale.sale,company:"
+msgid "Company"
+msgstr "Empresa"
+
+msgctxt "field:sale.sale,create_date:"
+msgid "Create Date"
+msgstr "Fecha de Creación"
+
+msgctxt "field:sale.sale,create_uid:"
+msgid "Create User"
+msgstr "Usuario creación"
+
+msgctxt "field:sale.sale,currency:"
+msgid "Currency"
+msgstr "Moneda"
+
+msgctxt "field:sale.sale,currency_digits:"
+msgid "Currency Digits"
+msgstr "Decimales de Moneda"
+
+msgctxt "field:sale.sale,description:"
+msgid "Description"
+msgstr "Descripción"
+
+msgctxt "field:sale.sale,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:sale.sale,lines:"
+msgid "Lines"
+msgstr "Lineas"
+
+msgctxt "field:sale.sale,paid_amount:"
+msgid "Paid Amount"
+msgstr "Pagado"
+
+msgctxt "field:sale.sale,party:"
+msgid "Party"
+msgstr "Cliente"
+
+msgctxt "field:sale.sale,party_lang:"
+msgid "Party Language"
+msgstr "Idioma del tercero"
+
+msgctxt "field:sale.sale,rec_name:"
+msgid "Name"
+msgstr "Nombre"
+
+msgctxt "field:sale.sale,reference:"
+msgid "Reference"
+msgstr "Referencia"
+
+msgctxt "field:sale.sale,residual_amount:"
+msgid "Residual Amount"
+msgstr "Pendiente"
+
+msgctxt "field:sale.sale,sale_date:"
+msgid "Sale Date"
+msgstr "Fecha de Venta"
+
+msgctxt "field:sale.sale,state:"
+msgid "State"
+msgstr "Estado"
+
+msgctxt "field:sale.sale,tax_amount:"
+msgid "Tax"
+msgstr "Impuesto"
+
+msgctxt "field:sale.sale,tax_amount_cache:"
+msgid "Tax Cache"
+msgstr "Impuestos Precalculado"
+
+msgctxt "field:sale.sale,total_amount:"
+msgid "Total"
+msgstr "Total"
+
+msgctxt "field:sale.sale,total_amount_cache:"
+msgid "Total Tax"
+msgstr "Total Impuestos"
+
+msgctxt "field:sale.sale,untaxed_amount:"
+msgid "Untaxed"
+msgstr "Base Imponible"
+
+msgctxt "field:sale.sale,untaxed_amount_cache:"
+msgid "Untaxed Cache"
+msgstr "Base Sin Impuesto Precalculada"
+
+msgctxt "field:sale.sale,write_date:"
+msgid "Write Date"
+msgstr "Fecha de Modificación"
+
+msgctxt "field:sale.sale,write_uid:"
+msgid "Write User"
+msgstr "Modificado por Usuario"
+
+msgctxt "help:company.company,logo:"
+msgid "Logo para RIDE de sus facturas"
+msgstr ""
+
+msgctxt "model:ir.action,name:act_sale_form"
+msgid "POS Sales"
+msgstr "Venta TPV"
+
+msgctxt "model:ir.action,name:report_sale_pos"
+msgid "Sale"
+msgstr "Venta"
+
+msgctxt "model:ir.action,name:report_sales"
+msgid "Reporte Vendedor"
+msgstr ""
+
+msgctxt "model:ir.action,name:wizard_sale_payment"
+msgid "Pay"
+msgstr "Pagar"
+
+msgctxt "model:ir.action,name:wizard_sales_report"
+msgid "Reporte de Ventas por fecha"
+msgstr ""
+
+msgctxt "model:ir.action.act_window.domain,name:act_sale_form_domain_all"
+msgid "All"
+msgstr "Todo"
+
+msgctxt "model:ir.action.act_window.domain,name:act_sale_form_domain_anulled"
+msgid "Anulled"
+msgstr "Anulada"
+
+msgctxt ""
+"model:ir.action.act_window.domain,name:act_sale_form_domain_confirmed"
+msgid "Confirmed"
+msgstr "Confirmado"
+
+msgctxt "model:ir.action.act_window.domain,name:act_sale_form_domain_draft"
+msgid "Draft"
+msgstr "Borrador"
+
+msgctxt ""
+"model:ir.action.act_window.domain,name:act_sale_form_domain_processing"
+msgid "Done"
+msgstr "Realizado"
+
+msgctxt ""
+"model:ir.action.act_window.domain,name:act_sale_form_domain_quotation"
+msgid "Quotation"
+msgstr "Cotización"
+
+msgctxt "model:ir.ui.menu,name:menu_sale"
+msgid "Sales"
+msgstr "Ventas"
+
+msgctxt "model:ir.ui.menu,name:menu_sale_pos"
+msgid "POS Sales"
+msgstr "Venta TPV"
+
+msgctxt "model:ir.ui.menu,name:menu_sale_report"
+msgid "Reporte de Ventas por fecha"
+msgstr ""
+
+msgctxt "model:nodux_sale_one.print_report_sale.start,name:"
+msgid "Print Report Sales Start"
+msgstr "Imprimit Reporte de Ventas"
+
+msgctxt "model:sale.line,name:"
+msgid "Sale Line"
+msgstr "Linea de Venta"
+
+msgctxt "model:sale.payment.form,name:"
+msgid "Sale Payment Form"
+msgstr "Formulario de Pago de Venta"
+
+msgctxt "model:sale.sale,name:"
+msgid "Sale"
+msgstr "Venta"
+
+msgctxt "odt:nodux_sale_one.report_sales:"
+msgid "/"
+msgstr ""
+
+msgctxt "odt:nodux_sale_one.report_sales:"
+msgid "Cliente"
+msgstr ""
+
+msgctxt "odt:nodux_sale_one.report_sales:"
+msgid "FECHA DE IMPRESIÓN:"
+msgstr ""
+
+msgctxt "odt:nodux_sale_one.report_sales:"
+msgid "Fecha"
+msgstr ""
+
+msgctxt "odt:nodux_sale_one.report_sales:"
+msgid "IVA"
+msgstr ""
+
+msgctxt "odt:nodux_sale_one.report_sales:"
+msgid "Monto total"
+msgstr ""
+
+msgctxt "odt:nodux_sale_one.report_sales:"
+msgid "Nodux Cía. Ltda."
+msgstr ""
+
+msgctxt "odt:nodux_sale_one.report_sales:"
+msgid "RESUMEN"
+msgstr ""
+
+msgctxt "odt:nodux_sale_one.report_sales:"
+msgid "RESUMEN DE VENTAS"
+msgstr ""
+
+msgctxt "odt:nodux_sale_one.report_sales:"
+msgid "SUBTOTAL 0%"
+msgstr ""
+
+msgctxt "odt:nodux_sale_one.report_sales:"
+msgid "SUBTOTAL 14%"
+msgstr ""
+
+msgctxt "odt:nodux_sale_one.report_sales:"
+msgid "SUBTOTALES"
+msgstr ""
+
+msgctxt "odt:nodux_sale_one.report_sales:"
+msgid "Subtotal"
+msgstr ""
+
+msgctxt "odt:nodux_sale_one.report_sales:"
+msgid "[ PAG."
+msgstr ""
+
+msgctxt "odt:nodux_sale_one.report_sales:"
+msgid "]"
+msgstr ""
+
+msgctxt "odt:sale.sale_pos:"
+msgid "$"
+msgstr ""
+
+msgctxt "odt:sale.sale_pos:"
+msgid "%:"
+msgstr ""
+
+msgctxt "odt:sale.sale_pos:"
+msgid ","
+msgstr ""
+
+msgctxt "odt:sale.sale_pos:"
+msgid "/100"
+msgstr ""
+
+msgctxt "odt:sale.sale_pos:"
+msgid "0"
+msgstr ""
+
+msgctxt "odt:sale.sale_pos:"
+msgid "14"
+msgstr ""
+
+msgctxt "odt:sale.sale_pos:"
+msgid "4"
+msgstr ""
+
+msgctxt "odt:sale.sale_pos:"
+msgid ":"
+msgstr ""
+
+msgctxt "odt:sale.sale_pos:"
+msgid "C.I./"
+msgstr ""
+
+msgctxt "odt:sale.sale_pos:"
+msgid "C.I./RUC"
+msgstr ""
+
+msgctxt "odt:sale.sale_pos:"
+msgid "COTIZACIÓN"
+msgstr ""
+
+msgctxt "odt:sale.sale_pos:"
+msgid "Cant."
+msgstr ""
+
+msgctxt "odt:sale.sale_pos:"
+msgid "Cliente"
+msgstr ""
+
+msgctxt "odt:sale.sale_pos:"
+msgid "Cliente:"
+msgstr ""
+
+msgctxt "odt:sale.sale_pos:"
+msgid "Código"
+msgstr ""
+
+msgctxt "odt:sale.sale_pos:"
+msgid "DOLARES"
+msgstr ""
+
+msgctxt "odt:sale.sale_pos:"
+msgid "Descripción"
+msgstr ""
+
+msgctxt "odt:sale.sale_pos:"
+msgid "Descuento:"
+msgstr ""
+
+msgctxt "odt:sale.sale_pos:"
+msgid "Dirección:"
+msgstr ""
+
+msgctxt "odt:sale.sale_pos:"
+msgid "Fecha:"
+msgstr ""
+
+msgctxt "odt:sale.sale_pos:"
+msgid "Firma Autorizada"
+msgstr ""
+
+msgctxt "odt:sale.sale_pos:"
+msgid "IVA 1"
+msgstr ""
+
+msgctxt "odt:sale.sale_pos:"
+msgid "Nodux - (07) 2 560215 - 0999323367 - hola@nodux.e"
+msgstr ""
+
+msgctxt "odt:sale.sale_pos:"
+msgid "Nodux Cía. Ltda.: (07) 2 560215 – 0999323367 – hola@nodux.ec"
+msgstr ""
+
+msgctxt "odt:sale.sale_pos:"
+msgid "P. Unit."
+msgstr ""
+
+msgctxt "odt:sale.sale_pos:"
+msgid "RUC:"
+msgstr ""
+
+msgctxt "odt:sale.sale_pos:"
+msgid "SON:"
+msgstr ""
+
+msgctxt "odt:sale.sale_pos:"
+msgid "Sistema"
+msgstr ""
+
+msgctxt "odt:sale.sale_pos:"
+msgid "Subt."
+msgstr ""
+
+msgctxt "odt:sale.sale_pos:"
+msgid "Subtotal"
+msgstr ""
+
+msgctxt "odt:sale.sale_pos:"
+msgid "Subtotal:"
+msgstr ""
+
+msgctxt "odt:sale.sale_pos:"
+msgid "TOTAL:"
+msgstr ""
+
+msgctxt "odt:sale.sale_pos:"
+msgid "Teléfono"
+msgstr ""
+
+msgctxt "odt:sale.sale_pos:"
+msgid "_______________"
+msgstr ""
+
+msgctxt "odt:sale.sale_pos:"
+msgid "________________"
+msgstr ""
+
+msgctxt "odt:sale.sale_pos:"
+msgid "c"
+msgstr "c"
+
+msgctxt "selection:sale.line,type:"
+msgid "Line"
+msgstr "Linea"
+
+msgctxt "selection:sale.sale,state:"
+msgid "Anulled"
+msgstr "Anulada"
+
+msgctxt "selection:sale.sale,state:"
+msgid "Confirmed"
+msgstr "Confirmado"
+
+msgctxt "selection:sale.sale,state:"
+msgid "Done"
+msgstr "Realizado"
+
+msgctxt "selection:sale.sale,state:"
+msgid "Draft"
+msgstr "Borrador"
+
+msgctxt "selection:sale.sale,state:"
+msgid "Quotation"
+msgstr "Cotización"
+
+msgctxt "view:company.company:"
+msgid "Logo"
+msgstr ""
+
+msgctxt "view:company.company:"
+msgid "Sequence"
+msgstr "Secuencia"
+
+msgctxt "view:company.company:"
+msgid "Sequence Sale"
+msgstr "Secuencia de Venta"
+
+msgctxt "view:nodux_sale_one.print_report_sale.start:"
+msgid "Print Salesman Report "
+msgstr "Imprimir Reporte de Ventas"
+
+msgctxt "view:product.product:"
+msgid "Products"
+msgstr "Productos"
+
+msgctxt "view:res.user:"
+msgid "Sale Limit"
+msgstr "Límite de Ventas"
+
+msgctxt "view:sale.line:"
+msgid "General"
+msgstr "General"
+
+msgctxt "view:sale.line:"
+msgid "Lines"
+msgstr "Lineas"
+
+msgctxt "view:sale.line:"
+msgid "Sale Line"
+msgstr "Linea de Venta"
+
+msgctxt "view:sale.payment.form:"
+msgid "Sale Payment Form"
+msgstr "Formulario de pago de venta"
+
+msgctxt "view:sale.sale:"
+msgid "Comment"
+msgstr "Comentario"
+
+msgctxt "view:sale.sale:"
+msgid "Other Info"
+msgstr "Otra Información"
+
+msgctxt "view:sale.sale:"
+msgid "Pos Cash Sales"
+msgstr "Ventas TPV"
+
+msgctxt "view:sale.sale:"
+msgid "Quote"
+msgstr "Cotizar"
+
+msgctxt "view:sale.sale:"
+msgid "Sale"
+msgstr "Venta"
+
+msgctxt "view:sale.sale:"
+msgid "Sales"
+msgstr "Ventas"
+
+msgctxt "view:sale.sale:"
+msgid "Total Amount"
+msgstr "Importe Total"
+
+msgctxt "view:sale.sale:"
+msgid "Untaxed Amount"
+msgstr "Base imponible"
+
+msgctxt "view:sale.sale:"
+msgid "_Pay"
+msgstr "Pagar"
+
+msgctxt "wizard_button:nodux_sale_one.print_report_sale,start,end:"
+msgid "Cancel"
+msgstr "Cancelar"
+
+msgctxt "wizard_button:nodux_sale_one.print_report_sale,start,print_:"
+msgid "Print"
+msgstr "Imprimir"
+
+msgctxt "wizard_button:sale.payment,start,end:"
+msgid "Cancel"
+msgstr "Cancelar"
+
+msgctxt "wizard_button:sale.payment,start,pay_:"
+msgid "Pay"
+msgstr "Pagar"

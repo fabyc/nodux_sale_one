@@ -1,0 +1,134 @@
+<?xml version="1.0"?>
+<!-- This file is part sale_pos module for Tryton.
+The COPYRIGHT file at the top level of this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+      <record model="ir.action.wizard" id="wizard_sale_payment">
+          <field name="name">Pay</field>
+          <field name="wiz_name">sale.payment</field>
+      </record>
+      <record model="ir.ui.view" id="sale_payment_view_form">
+          <field name="model">sale.payment.form</field>
+          <field name="type">form</field>
+          <field name="name">sale_payment_form</field>
+      </record>
+
+        <!-- Views -->
+        <record model="ir.ui.view" id="sale_line_view_tree">
+            <field name="model">sale.line</field>
+            <field name="type">tree</field>
+            <field name="priority">20</field>
+            <field name="name">sale_line_tree</field>
+        </record>
+        <record model="ir.ui.view" id="sale_line_view_form">
+            <field name="model">sale.line</field>
+            <field name="type">form</field>
+            <field name="name">sale_line_form</field>
+        </record>
+
+        <record model="ir.ui.view" id="sale_pos_view_tree">
+            <field name="model">sale.sale</field>
+            <field name="type">tree</field>
+            <field name="priority">20</field>
+            <field name="name">sale_pos_tree</field>
+        </record>
+        <record model="ir.ui.view" id="sale_pos_view_form">
+            <field name="model">sale.sale</field>
+            <field name="type">form</field>
+            <field name="priority">20</field>
+            <field name="name">sale_pos_form</field>
+        </record>
+        <!-- Actions -->
+        <record model="ir.action.act_window" id="act_sale_form">
+            <field name="name">POS Sales</field>
+            <field name="res_model">sale.sale</field>
+        </record>
+
+        <record model="ir.action.act_window.view" id="act_sale_view_form">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="sale_pos_view_form"/>
+            <field name="act_window" ref="act_sale_form"/>
+        </record>
+
+        <record model="ir.action.act_window.view" id="act_sale_view_tree">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="sale_pos_view_tree"/>
+            <field name="act_window" ref="act_sale_form"/>
+        </record>
+
+        <record model="ir.action.act_window.domain" id="act_sale_form_domain_draft">
+            <field name="name">Draft</field>
+            <field name="sequence" eval="10"/>
+            <field name="domain">[('state', '=', 'draft')]</field>
+            <field name="act_window" ref="act_sale_form"/>
+        </record>
+        <record model="ir.action.act_window.domain" id="act_sale_form_domain_quotation">
+            <field name="name">Quotation</field>
+            <field name="sequence" eval="20"/>
+            <field name="domain">[('state', '=', 'quotation')]</field>
+            <field name="act_window" ref="act_sale_form"/>
+        </record>
+        <record model="ir.action.act_window.domain" id="act_sale_form_domain_confirmed">
+            <field name="name">Confirmed</field>
+            <field name="sequence" eval="30"/>
+            <field name="domain">[('state', '=', 'confirmed')]</field>
+            <field name="act_window" ref="act_sale_form"/>
+        </record>
+        <record model="ir.action.act_window.domain" id="act_sale_form_domain_processing">
+            <field name="name">Done</field>
+            <field name="sequence" eval="40"/>
+            <field name="domain">[('state', '=', 'done')]</field>
+            <field name="act_window" ref="act_sale_form"/>
+        </record>
+        <record model="ir.action.act_window.domain" id="act_sale_form_domain_anulled">
+            <field name="name">Anulled</field>
+            <field name="sequence" eval="50"/>
+            <field name="domain">[('state', '=', 'anulled')]</field>
+            <field name="act_window" ref="act_sale_form"/>
+        </record>
+        <record model="ir.action.act_window.domain" id="act_sale_form_domain_all">
+            <field name="name">All</field>
+            <field name="sequence" eval="9999"/>
+            <field name="domain"></field>
+            <field name="act_window" ref="act_sale_form"/>
+        </record>
+
+        <menuitem name="Sales" id="menu_sale" sequence="5"/>
+        <menuitem name="POS Sales" parent="menu_sale" id="menu_sale_pos"
+            sequence="1" icon="tryton-list" action="act_sale_form"/>
+
+        <!-- Reports -->
+        <record model="ir.action.report" id="report_sale_pos">
+            <field name="name">Sale</field>
+            <field name="model">sale.sale</field>
+            <field name="report_name">sale.sale_pos</field>
+            <field name="report">nodux_sale_one/sale.odt</field>
+        </record>
+
+        <record model="ir.action.keyword" id="report_sale_pos_keyword">
+            <field name="keyword">form_print</field>
+            <field name="model">sale.sale,-1</field>
+            <field name="action" ref="report_sale_pos"/>
+        </record>
+
+        <!--REPORTE TOTAL DE VENTAS-->
+        <record model="ir.ui.view" id="print_sale_report_start_view_form">
+            <field name="model">nodux_sale_one.print_report_sale.start</field>
+            <field name="type">form</field>
+            <field name="name">sale_report_start_form</field>
+        </record>
+        <record model="ir.action.wizard" id="wizard_sales_report">
+            <field name="name">Reporte de Ventas por fecha</field>
+            <field name="wiz_name">nodux_sale_one.print_report_sale</field>
+        </record>
+        <record model="ir.action.report" id="report_sales">
+            <field name="name">Reporte de Ventas</field>
+            <field name="model"></field>
+            <field name="report_name">nodux_sale_one.report_sales</field>
+            <field name="report">nodux_sale_one/report_sales.odt</field>
+        </record>
+        <menuitem parent="menu_sale" action="wizard_sales_report"
+            id="menu_sale_report" icon="tryton-print"/>
+
+    </data>
+</tryton>
