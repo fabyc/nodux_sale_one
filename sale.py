@@ -31,7 +31,6 @@ import time
 __all__ = ['Sale', 'SaleLine','SalePaymentForm', 'WizardSalePayment',
 'SaleReportPos', 'PrintReportSalesStart', 'PrintReportSales', 'ReportSales']
 
-__metaclass__ = PoolMeta
 _ZERO = Decimal(0)
 
 class Sale(Workflow, ModelSQL, ModelView):
@@ -67,17 +66,9 @@ class Sale(Workflow, ModelSQL, ModelView):
             'required': ~Eval('state').in_(['draft', 'quotation', 'cancel']),
             },
         depends=['state'])
-    """
-    payment_term = fields.Many2One('account.invoice.payment_term',
-        'Payment Term', required=True, states={
-            'readonly': Eval('state') != 'draft',
-            },
-        depends=['state'])
-    """
     party = fields.Many2One('party.party', 'Party', required=True, select=True,
         states={
-            'readonly': ((Eval('state') != 'draft')
-                | (Eval('lines', [0]) & Eval('party'))),
+            'readonly': ((Eval('state') != 'draft')),
             },
         depends=['state'])
     party_lang = fields.Function(fields.Char('Party Language'),
@@ -134,6 +125,15 @@ class Sale(Workflow, ModelSQL, ModelView):
     @classmethod
     def __setup__(cls):
         super(Sale, cls).__setup__()
+        cls._transitions |= set((
+                ('draft', 'quotation'),
+                ('draft', 'confirmed'),
+                ('draft', 'done'),
+                ('quotation', 'confirmed'),
+                ('quotation', 'done'),
+                ('confirmed', 'done'),
+                ('done', 'anull'),
+                ))
 
         cls._buttons.update({
                 'wizard_sale_payment': {
@@ -302,9 +302,15 @@ class Sale(Workflow, ModelSQL, ModelView):
     @ModelView.button
     @Workflow.transition('anulled')
     def anull(cls, sales):
+        for sale in sales:
+            for line in sale.lines:
+                product = line.product.template
+                product.total = line.product.template.total + line.quantity
+                product.save()
         cls.write([s for s in sales], {
                 'state': 'anulled',
                 })
+
 
     @classmethod
     @ModelView.button_action('nodux_sale_one.wizard_sale_payment')
@@ -668,6 +674,14 @@ class WizardSalePayment(Wizard):
         active_id = Transaction().context.get('active_id', False)
         sale = Sale(active_id)
 
+        for line in sale.lines:
+            total = line.product.template.total
+            if (total <= 0)| (line.quantity > total):
+                self.raise_user_error('No tiene Stock del Producto %s', line.product.name)
+            else:
+                template = line.product.template
+                template.total = total - line.quantity
+                template.save()
         Company = pool.get('company.company')
         company = Company(Transaction().context.get('company'))
 
