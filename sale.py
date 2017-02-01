@@ -156,6 +156,11 @@ class Sale(Workflow, ModelSQL, ModelView):
         return Transaction().context.get('company')
 
     @staticmethod
+    def default_sale_date():
+        date = Pool().get('ir.date')
+        return date.today()
+
+    @staticmethod
     def default_paid_amount():
         return Decimal(0.0)
 
