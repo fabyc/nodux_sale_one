@@ -15,8 +15,7 @@ class Company():
     __name__ = 'company.company'
 
     sequence_sale = fields.Integer('Sequence Sale')
-    logo = fields.Binary('Logo de su empresa', help='Logo para RIDE de sus facturas')
-
+    
     @classmethod
     def __setup__(cls):
         super(Company, cls).__setup__()

@@ -2,15 +2,10 @@
 <data>
     <xpath expr="/form/notebook/page[@id='reports']" position="after">
         <page string="Sequence" id="sri">
-            <newline/>
             <separator string="Sequence Sale" id='secuencia'/>
+            <newline/>
             <label name="sequence_sale"/>
             <field name="sequence_sale"/>
-
-            <separator string="Logo" id='logo'/>
-            <newline/>
-            <label name="logo"/>
-            <field xfill="0" xexpand="1" name="logo" img_width="80" img_height="80" height="80" width="80" widget="image"/>
         </page>
     </xpath>
 </data>
