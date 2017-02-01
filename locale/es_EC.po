@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "field:company.company,emision:"
+msgid "Emission Point"
+msgstr "Punto de Emisión"
+
 msgctxt "field:company.company,logo:"
 msgid "Logo de su empresa"
 msgstr ""
@@ -9,6 +13,10 @@ msgstr ""
 msgctxt "field:company.company,sequence_sale:"
 msgid "Sequence Sale"
 msgstr "Secuencia de Venta"
+
+msgctxt "field:company.company,sucursal:"
+msgid "Sucursal"
+msgstr "Sucursal"
 
 msgctxt "field:nodux_sale_one.print_report_sale.start,company:"
 msgid "Company"
@@ -207,8 +215,8 @@ msgid "Name"
 msgstr "Nombre"
 
 msgctxt "field:sale.sale,reference:"
-msgid "Reference"
-msgstr "Referencia"
+msgid "Number"
+msgstr "Número"
 
 msgctxt "field:sale.sale,residual_amount:"
 msgid "Residual Amount"
@@ -253,10 +261,6 @@ msgstr "Fecha de Modificación"
 msgctxt "field:sale.sale,write_uid:"
 msgid "Write User"
 msgstr "Modificado por Usuario"
-
-msgctxt "help:company.company,logo:"
-msgid "Logo para RIDE de sus facturas"
-msgstr ""
 
 msgctxt "model:ir.action,name:act_sale_form"
 msgid "POS Sales"
@@ -332,6 +336,10 @@ msgstr "Formulario de Pago de Venta"
 msgctxt "model:sale.sale,name:"
 msgid "Sale"
 msgstr "Venta"
+
+msgctxt "odt:nodux_sale_one.report_sales:"
+msgid "-"
+msgstr ""
 
 msgctxt "odt:nodux_sale_one.report_sales:"
 msgid "/"
@@ -560,14 +568,6 @@ msgstr "Borrador"
 msgctxt "selection:sale.sale,state:"
 msgid "Quotation"
 msgstr "Cotización"
-
-msgctxt "view:company.company:"
-msgid "Logo"
-msgstr ""
-
-msgctxt "view:company.company:"
-msgid "Sequence"
-msgstr "Secuencia"
 
 msgctxt "view:company.company:"
 msgid "Sequence Sale"

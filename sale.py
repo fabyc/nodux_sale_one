@@ -47,7 +47,7 @@ class Sale(Workflow, ModelSQL, ModelView):
                 Eval('context', {}).get('company', -1)),
             ],
         depends=['state'], select=True)
-    reference = fields.Char('Reference', readonly=True, select=True)
+    reference = fields.Char('Number', readonly=True, select=True)
     description = fields.Char('Description',
         states={
             'readonly': Eval('state') != 'draft',
@@ -699,9 +699,29 @@ class WizardSalePayment(Wizard):
 
         if not sale.reference:
             reference = company.sequence_sale
+            sucursal = company.sucursal
+            emision = company.emision
             company.sequence_sale = company.sequence_sale + 1
             company.save()
-            sale.reference = str(reference)
+
+            if len(str(reference)) == 1:
+                reference_end = '00000000' + str(reference)
+            elif len(str(reference)) == 2:
+                reference_end = '0000000' + str(reference)
+            elif len(str(reference)) == 3:
+                reference_end = '000000' + str(reference)
+            elif len(str(reference)) == 4:
+                reference_end = '00000' + str(reference)
+            elif len(str(reference)) == 5:
+                reference_end = '0000' + str(reference)
+            elif len(str(reference)) == 6:
+                reference_end = '000' + str(reference)
+            elif len(str(reference)) == 7:
+                reference_end = '00' + str(reference)
+            elif len(str(reference)) == 8:
+                reference_end = '0' + str(reference)
+
+            sale.reference = str(sucursal)+'-'+str(emision)+'-'+reference_end
 
         form = self.start
 
