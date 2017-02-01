@@ -798,6 +798,7 @@ class PrintReportSalesStart(ModelView):
 
     company = fields.Many2One('company.company', 'Company', required=True)
     date = fields.Date("Sale Date", required= True)
+    date_end = fields.Date("Sale Date End", required= True)
 
     @staticmethod
     def default_company():
@@ -805,6 +806,11 @@ class PrintReportSalesStart(ModelView):
 
     @staticmethod
     def default_date():
+        date = Pool().get('ir.date')
+        return date.today()
+
+    @staticmethod
+    def default_date_end():
         date = Pool().get('ir.date')
         return date.today()
 
@@ -822,6 +828,7 @@ class PrintReportSales(Wizard):
         data = {
             'company': self.start.company.id,
             'date' : self.start.date,
+            'date_end' : self.start.date_end,
             }
         return action, data
 
@@ -840,6 +847,7 @@ class ReportSales(Report):
         Company = pool.get('company.company')
         Sale = pool.get('sale.sale')
         fecha = data['date']
+        fecha_fin = data['date_end']
         total_ventas =  Decimal(0.0)
         total_iva =  Decimal(0.0)
         subtotal_total =  Decimal(0.0)
@@ -849,7 +857,7 @@ class ReportSales(Report):
         total_recibido = Decimal(0.0)
         total_por_cobrar = Decimal(0.0)
         company = Company(data['company'])
-        sales = Sale.search([('sale_date', '=', fecha), ('state','!=', 'draft')])
+        sales = Sale.search([('sale_date', '>=', fecha), ('sale_date', '<=', fecha_fin), ('state','=', 'done')])
 
         if sales:
             for s in sales:
@@ -858,7 +866,8 @@ class ReportSales(Report):
                     total_iva += s.tax_amount
                     subtotal_total += s.untaxed_amount
                     total_recibido += s.paid_amount
-                    total_por_cobrar += s.residual_amount
+                    if s.residual_amount != None:
+                        total_por_cobrar += s.residual_amount
 
                     for line in s.lines:
                         if line.product.taxes_category == True:
@@ -882,6 +891,7 @@ class ReportSales(Report):
 
         localcontext['company'] = company
         localcontext['fecha'] = fecha.strftime('%d/%m/%Y')
+        localcontext['fecha_fin'] = fecha_fin.strftime('%d/%m/%Y')
         localcontext['hora'] = hora.strftime('%H:%M:%S')
         localcontext['fecha_im'] = hora.strftime('%d/%m/%Y')
         localcontext['total_ventas'] = total_ventas

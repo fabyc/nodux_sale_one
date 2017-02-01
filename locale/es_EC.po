@@ -16,7 +16,11 @@ msgstr "Empresa"
 
 msgctxt "field:nodux_sale_one.print_report_sale.start,date:"
 msgid "Sale Date"
-msgstr "Fecha de Venta"
+msgstr "Fecha Inicio"
+
+msgctxt "field:nodux_sale_one.print_report_sale.start,date_end:"
+msgid "Sale Date End"
+msgstr "Fecha Fin"
 
 msgctxt "field:nodux_sale_one.print_report_sale.start,id:"
 msgid "ID"
@@ -263,7 +267,7 @@ msgid "Sale"
 msgstr "Venta"
 
 msgctxt "model:ir.action,name:report_sales"
-msgid "Reporte Vendedor"
+msgid "Reporte de Ventas"
 msgstr ""
 
 msgctxt "model:ir.action,name:wizard_sale_payment"

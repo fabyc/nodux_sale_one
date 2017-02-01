@@ -7,4 +7,6 @@ this repository contains the full copyright notices and license terms. -->
     <newline/>
     <label name="date"/>
     <field name="date"/>
+    <label name="date_end"/>
+    <field name="date_end"/>
 </form>
