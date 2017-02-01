@@ -674,6 +674,13 @@ class WizardSalePayment(Wizard):
         active_id = Transaction().context.get('active_id', False)
         sale = Sale(active_id)
 
+        if sale.party.customer == True:
+            pass
+        else:
+            party = sale.party
+            party.customer = True
+            party.save()
+
         for line in sale.lines:
             total = line.product.template.total
             if (total <= 0)| (line.quantity > total):
