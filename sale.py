@@ -413,6 +413,14 @@ class SaleLine(ModelSQL, ModelView):
         return 'line'
 
     @staticmethod
+    def default_quantity():
+        return 1
+
+    @staticmethod
+    def default_unit_digits():
+        return 2
+
+    @staticmethod
     def default_sale():
         if Transaction().context.get('sale'):
             return Transaction().context.get('sale')
@@ -510,20 +518,17 @@ class SaleLine(ModelSQL, ModelView):
             if res['unit_price']:
                 res['unit_price'] = res['unit_price'].quantize(
                     Decimal(1) / 10 ** self.__class__.unit_price.digits[1])
-        if not self.description:
-            with Transaction().set_context(party_context):
-                res['description'] = Product(self.product.id).rec_name
 
         self.unit_price = res['unit_price']
         self.type = 'line'
         res['amount'] = self.on_change_with_amount()
-        res['description'] =  Product(self.product.id).name
+        res['description'] =  self.product.name
         return res
 
 
     @fields.depends('product', 'quantity', 'unit',
         '_parent_sale.currency', '_parent_sale.party',
-        '_parent_sale.sale_date')
+        '_parent_sale.sale_date', 'description')
     def on_change_quantity(self):
         Product = Pool().get('product.product')
 
