@@ -111,6 +111,7 @@ class Sale(Workflow, ModelSQL, ModelView):
 
     paid_amount = fields.Numeric('Paid Amount', readonly=True)
     residual_amount = fields.Numeric('Residual Amount', readonly=True)
+    days = fields.Integer('Credit days')
 
     @classmethod
     def __register__(cls, module_name):
