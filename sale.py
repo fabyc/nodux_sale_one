@@ -50,7 +50,7 @@ class Sale(Workflow, ModelSQL, ModelView):
     reference = fields.Char('Number', readonly=True, select=True)
     description = fields.Char('Description',
         states={
-            'readonly': Eval('state') != 'draft',
+            'readonly': ~Eval('state').in_(['draft', 'quotation']),
             },
         depends=['state'])
     state = fields.Selection([
@@ -68,7 +68,7 @@ class Sale(Workflow, ModelSQL, ModelView):
         depends=['state'])
     party = fields.Many2One('party.party', 'Party', required=True, select=True,
         states={
-            'readonly': ((Eval('state') != 'draft')),
+            'readonly': ~Eval('state').in_(['draft', 'quotation']),
             },
         depends=['state'])
     party_lang = fields.Function(fields.Char('Party Language'),
@@ -83,7 +83,7 @@ class Sale(Workflow, ModelSQL, ModelView):
     currency_digits = fields.Function(fields.Integer('Currency Digits'),
         'on_change_with_currency_digits')
     lines = fields.One2Many('sale.line', 'sale', 'Lines', states={
-            'readonly': Eval('state') != 'draft',
+            'readonly': ~Eval('state').in_(['draft', 'quotation']),
             },
         depends=['party', 'state'])
     comment = fields.Text('Comment')
