@@ -331,8 +331,9 @@ class Sale(Workflow, ModelSQL, ModelView):
         for sale in sales:
             for line in sale.lines:
                 product = line.product.template
-                product.total = line.product.template.total + line.quantity
-                product.save()
+                if product.type == "goods":
+                    product.total = line.product.template.total + line.quantity
+                    product.save()
         cls.write([s for s in sales], {
                 'state': 'anulled',
                 })
@@ -713,13 +714,14 @@ class WizardSalePayment(Wizard):
             party.save()
 
         for line in sale.lines:
-            total = line.product.template.total
-            if (total <= 0)| (line.quantity > total):
-                self.raise_user_error('No tiene Stock del Producto %s', line.product.name)
-            else:
-                template = line.product.template
-                template.total = total - line.quantity
-                template.save()
+            if line.product.template.type == "goods":
+                total = line.product.template.total
+                if (total <= 0)| (line.quantity > total):
+                    self.raise_user_error('No tiene Stock del Producto %s', line.product.name)
+                else:
+                    template = line.product.template
+                    template.total = total - line.quantity
+                    template.save()
         Company = pool.get('company.company')
         company = Company(Transaction().context.get('company'))
 
