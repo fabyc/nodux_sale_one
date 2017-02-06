@@ -130,5 +130,29 @@ The COPYRIGHT file at the top level of this repository contains the full copyrig
         <menuitem parent="menu_sale" action="wizard_sales_report"
             id="menu_sale_report" icon="tryton-print"/>
 
+        <!--Reporte de cuentas por cobrar -->
+        <record model="ir.ui.view" id="sale_view_tree">
+            <field name="model">sale.sale</field>
+            <field name="type">tree</field>
+            <field name="priority">20</field>
+            <field name="name">sale_tree</field>
+        </record>
+
+        <record model="ir.action.act_window" id="act_receivable_form">
+          <field name="name">Por cobrar</field>
+          <field name="res_model">sale.sale</field>
+          <field name="domain">[('party', '!=', None), ('state', '=', 'confirmed'), ('residual_amount', '>=', 0)]</field>
+        </record>
+
+        <record model="ir.action.act_window.view" id="act_receivable_form_view1">
+          <field name="sequence" eval="10"/>
+          <field name="view" ref="sale_view_tree"/>
+          <field name="act_window" ref="act_receivable_form"/>
+        </record>
+
+        <menuitem parent="menu_sale" action="act_receivable_form"
+          sequence="3" id="menu_receivable_form"/>
+
+
     </data>
 </tryton>

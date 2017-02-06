@@ -112,6 +112,7 @@ class Sale(Workflow, ModelSQL, ModelView):
     paid_amount = fields.Numeric('Paid Amount', readonly=True)
     residual_amount = fields.Numeric('Residual Amount', readonly=True)
     days = fields.Integer('Credit days')
+    state_date = fields.Function(fields.Char('State dy Date', readonly=True), 'get_state_date')
 
     @classmethod
     def __register__(cls, module_name):
@@ -121,7 +122,6 @@ class Sale(Workflow, ModelSQL, ModelView):
         super(Sale, cls).__register__(module_name)
         cls._order.insert(0, ('sale_date', 'DESC'))
         cls._order.insert(1, ('id', 'DESC'))
-
 
     @classmethod
     def __setup__(cls):
@@ -152,9 +152,29 @@ class Sale(Workflow, ModelSQL, ModelView):
                 })
         cls._states_cached = ['confirmed', 'processing', 'done', 'cancel']
 
+    @classmethod
+    def get_state_date(cls, sales, names):
+        pool = Pool()
+        Date = pool.get('ir.date')
+        date = Date.today()
+        result = {n: {s.id: Decimal(0) for s in sales} for n in names}
+        for name in names:
+            for sale in sales:
+                days = (date - sale.sale_date).days
+                if sale.days >= days:
+                    result[name][sale.id] = ''
+                else:
+                    result[name][sale.id] = 'vencida'
+
+        return result
+
     @staticmethod
     def default_company():
         return Transaction().context.get('company')
+
+    @staticmethod
+    def default_days():
+        return 0
 
     @staticmethod
     def default_sale_date():

@@ -186,6 +186,10 @@ msgctxt "field:sale.sale,currency_digits:"
 msgid "Currency Digits"
 msgstr "Decimales de Moneda"
 
+msgctxt "field:sale.sale,days:"
+msgid "Credit days"
+msgstr "Dias de Crédito"
+
 msgctxt "field:sale.sale,description:"
 msgid "Description"
 msgstr "Descripción"
@@ -230,6 +234,10 @@ msgctxt "field:sale.sale,state:"
 msgid "State"
 msgstr "Estado"
 
+msgctxt "field:sale.sale,state_date:"
+msgid "State dy Date"
+msgstr "Estado por Fecha"
+
 msgctxt "field:sale.sale,tax_amount:"
 msgid "Tax"
 msgstr "Impuesto"
@@ -261,6 +269,10 @@ msgstr "Fecha de Modificación"
 msgctxt "field:sale.sale,write_uid:"
 msgid "Write User"
 msgstr "Modificado por Usuario"
+
+msgctxt "model:ir.action,name:act_receivable_form"
+msgid "Por cobrar"
+msgstr ""
 
 msgctxt "model:ir.action,name:act_sale_form"
 msgid "POS Sales"
@@ -308,6 +320,10 @@ msgctxt ""
 "model:ir.action.act_window.domain,name:act_sale_form_domain_quotation"
 msgid "Quotation"
 msgstr "Cotización"
+
+msgctxt "model:ir.ui.menu,name:menu_receivable_form"
+msgid "Por cobrar"
+msgstr ""
 
 msgctxt "model:ir.ui.menu,name:menu_sale"
 msgid "Sales"
@@ -470,10 +486,6 @@ msgid "Descripción"
 msgstr ""
 
 msgctxt "odt:sale.sale_pos:"
-msgid "Descuento:"
-msgstr ""
-
-msgctxt "odt:sale.sale_pos:"
 msgid "Dirección:"
 msgstr ""
 
@@ -610,12 +622,20 @@ msgid "Other Info"
 msgstr "Otra Información"
 
 msgctxt "view:sale.sale:"
+msgid "Paid Amount"
+msgstr "Total Pagado"
+
+msgctxt "view:sale.sale:"
 msgid "Pos Cash Sales"
 msgstr "Ventas TPV"
 
 msgctxt "view:sale.sale:"
 msgid "Quote"
 msgstr "Cotizar"
+
+msgctxt "view:sale.sale:"
+msgid "Residual Amount"
+msgstr "Total Pendiente"
 
 msgctxt "view:sale.sale:"
 msgid "Sale"
