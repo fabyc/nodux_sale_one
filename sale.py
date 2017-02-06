@@ -894,7 +894,7 @@ class ReportSales(Report):
         total_recibido = Decimal(0.0)
         total_por_cobrar = Decimal(0.0)
         company = Company(data['company'])
-        sales = Sale.search([('sale_date', '>=', fecha), ('sale_date', '<=', fecha_fin), ('state','=', 'done')])
+        sales = Sale.search([('sale_date', '>=', fecha), ('sale_date', '<=', fecha_fin), ('state','in', ['done','confirmed'])])
 
         if sales:
             for s in sales:
