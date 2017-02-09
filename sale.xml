@@ -153,6 +153,22 @@ The COPYRIGHT file at the top level of this repository contains the full copyrig
         <menuitem parent="menu_sale" action="act_receivable_form"
           sequence="3" id="menu_receivable_form"/>
 
+        <!--Group-->
+        <record model="res.group" id="group_stock_force">
+            <field name="name">Nodux - Stock Force</field>
+        </record>
+
+        <record model="res.user-res.group"
+            id="user_admin_group_stock_force">
+            <field name="user" ref="res.user_admin"/>
+            <field name="group" ref="group_stock_force"/>
+        </record>
+
+        <record model="res.user-res.group"
+            id="user_trigger_group_stock_force">
+            <field name="user" ref="res.user_admin"/>
+            <field name="group" ref="group_stock_force"/>
+        </record>
 
     </data>
 </tryton>

@@ -341,6 +341,10 @@ msgctxt "model:nodux_sale_one.print_report_sale.start,name:"
 msgid "Print Report Sales Start"
 msgstr "Imprimit Reporte de Ventas"
 
+msgctxt "model:res.group,name:group_stock_force"
+msgid "Nodux - Stock Force"
+msgstr "Nodux - Forzar Stock "
+
 msgctxt "model:sale.line,name:"
 msgid "Sale Line"
 msgstr "Linea de Venta"
@@ -612,6 +616,10 @@ msgstr "Linea de Venta"
 msgctxt "view:sale.payment.form:"
 msgid "Sale Payment Form"
 msgstr "Formulario de pago de venta"
+
+msgctxt "view:sale.sale:"
+msgid "Anull"
+msgstr "Anular"
 
 msgctxt "view:sale.sale:"
 msgid "Comment"
