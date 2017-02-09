@@ -42,6 +42,8 @@ The COPYRIGHT file at the top level of this repository contains the full copyrig
         <button name="quote" string="Quote" icon="tryton-go-next"/>
         <button name="wizard_sale_payment" string="_Pay"
             icon="tryton-go-next"/>
+        <button name="anull" string="Anull"
+            icon="tryton-cancel"/>
     </group>
     <label name="state"/>
     <field name="state"/>
