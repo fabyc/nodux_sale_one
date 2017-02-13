@@ -170,5 +170,19 @@ The COPYRIGHT file at the top level of this repository contains the full copyrig
             <field name="group" ref="group_stock_force"/>
         </record>
 
+        <!-- relacionado-->
+        <record model="ir.action.act_window" id="act_sale_relate_form">
+            <field name="name">Venta</field>
+            <field name="res_model">sale.sale</field>
+            <field name="domain">[('id', 'in', Eval('active_ids'))]</field>
+        </record>
+        <record model="ir.action.keyword"
+                id="act_open_sale_keyword1">
+            <field name="keyword">form_relate</field>
+            <field name="model">sale.sale,-1</field>
+            <field name="action" ref="act_sale_relate_form"/>
+        </record>
+
+
     </data>
 </tryton>
