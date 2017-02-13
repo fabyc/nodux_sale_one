@@ -1,8 +1,5 @@
 #! -*- coding: utf8 -*-
 
-# This file is part of sale_pos module for Tryton.
-# The COPYRIGHT file at the top level of this repository contains
-# the full copyright notices and license terms.
 from decimal import Decimal
 from datetime import datetime
 from trytond.model import Workflow, ModelView, ModelSQL, fields
@@ -681,6 +678,12 @@ class WizardSalePayment(Wizard):
         pool = Pool()
         Sale = pool.get('sale.sale')
         sale = Sale(Transaction().context['active_id'])
+
+        if sale.days > 0:
+            if sale.residual_amount > Decimal(0.0):
+                payment_amount = sale.residual_amount
+            else:
+                payment_amount = Decimal(0.0)
 
         if sale.residual_amount > Decimal(0.0):
             payment_amount = sale.residual_amount
