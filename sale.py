@@ -57,10 +57,9 @@ class Sale(Workflow, ModelSQL, ModelView):
         ('done', 'Done'),
         ('anulled', 'Anulled'),
     ], 'State', readonly=True, required=True)
-    sale_date = fields.Date('Sale Date',
+    sale_date = fields.Date('Sale Date', required=True,
         states={
             'readonly': ~Eval('state').in_(['draft', 'quotation']),
-            'required': ~Eval('state').in_(['draft', 'quotation', 'cancel']),
             },
         depends=['state'])
     party = fields.Many2One('party.party', 'Party', required=True, select=True,
@@ -130,12 +129,12 @@ class Sale(Workflow, ModelSQL, ModelView):
                 ('quotation', 'confirmed'),
                 ('quotation', 'done'),
                 ('confirmed', 'done'),
-                ('done', 'anull'),
+                ('done', 'anulled'),
                 ))
 
         cls._buttons.update({
                 'wizard_sale_payment': {
-                    'invisible': Eval('state') == 'done',
+                    'invisible': (Eval('state').in_(['done', 'anulled'])),
                     'readonly': Not(Bool(Eval('lines'))),
                     },
                 'quote': {
@@ -143,11 +142,26 @@ class Sale(Workflow, ModelSQL, ModelView):
                     'readonly': ~Eval('lines', []),
                     },
                 'anull': {
-                    'invisible': Eval('state') == 'draft',
+                    'invisible': (Eval('state').in_(['draft', 'anulled', 'confirm'])),
                     'readonly': Not(Bool(Eval('lines'))),
                     },
                 })
+
         cls._states_cached = ['confirmed', 'processing', 'done', 'cancel']
+
+    @classmethod
+    def copy(cls, sales, default=None):
+        Date = Pool().get('ir.date')
+        date = Date.today()
+        if default is None:
+            default = {}
+        default = default.copy()
+        default['state'] = 'draft'
+        default['reference'] = None
+        default['paid_amount'] = Decimal(0.0)
+        default['residual_amount'] = None
+        default['sale_date'] = date
+        return super(Sale, cls).copy(sales, default=default)
 
     @classmethod
     def get_state_date(cls, sales, names):
