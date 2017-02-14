@@ -684,11 +684,11 @@ class WizardSalePayment(Wizard):
                 payment_amount = sale.residual_amount
             else:
                 payment_amount = Decimal(0.0)
-
-        if sale.residual_amount > Decimal(0.0):
-            payment_amount = sale.residual_amount
         else:
-            payment_amount = sale.total_amount
+            if sale.residual_amount > Decimal(0.0):
+                payment_amount = sale.residual_amount
+            else:
+                payment_amount = sale.total_amount
         return {
             'payment_amount': payment_amount,
             'currency_digits': sale.currency_digits,
@@ -717,44 +717,45 @@ class WizardSalePayment(Wizard):
             party.save()
 
         for line in sale.lines:
-            if line.product.template.type == "goods":
-                total = line.product.template.total
-                if (total <= 0)| (line.quantity > total):
-                    origin = str(sale)
-                    def in_group():
-                        pool = Pool()
-                        ModelData = pool.get('ir.model.data')
-                        User = pool.get('res.user')
-                        Group = pool.get('res.group')
-                        Module = pool.get('ir.module.module')
-                        group = Group(ModelData.get_id('nodux_sale_one',
-                                        'group_stock_force'))
-                        transaction = Transaction()
-                        user_id = transaction.user
-                        if user_id == 0:
-                            user_id = transaction.context.get('user', user_id)
-                        if user_id == 0:
-                            return True
-                        user = User(user_id)
-                        return origin and group in user.groups
-                    if not in_group():
-                        self.raise_user_error('No tiene Stock del Producto %s', line.product.name)
-                    else:
-                        self.raise_user_warning('not_enough_stock_%s' % line.id,
-                               'No hay stock suficiente del producto: "%s"'
-                            'para realizar la venta.', (line.product.name))
+            if (sale.state == 'draft') | (sale.state == 'quotation'):
+                if line.product.template.type == "goods":
+                    total = line.product.template.total
+                    if (total <= 0)| (line.quantity > total):
+                        origin = str(sale)
+                        def in_group():
+                            pool = Pool()
+                            ModelData = pool.get('ir.model.data')
+                            User = pool.get('res.user')
+                            Group = pool.get('res.group')
+                            Module = pool.get('ir.module.module')
+                            group = Group(ModelData.get_id('nodux_sale_one',
+                                            'group_stock_force'))
+                            transaction = Transaction()
+                            user_id = transaction.user
+                            if user_id == 0:
+                                user_id = transaction.context.get('user', user_id)
+                            if user_id == 0:
+                                return True
+                            user = User(user_id)
+                            return origin and group in user.groups
+                        if not in_group():
+                            self.raise_user_error('No tiene Stock del Producto %s', line.product.name)
+                        else:
+                            self.raise_user_warning('no_stock_%s' % line.id,
+                                   'No hay stock suficiente del producto: "%s"'
+                                'para realizar la venta.', (line.product.name))
 
-                    template = line.product.template
-                    if total == None:
-                        template.total = (line.quantity * -1)
-                        template.save()
+                        template = line.product.template
+                        if total == None:
+                            template.total = (line.quantity * -1)
+                            template.save()
+                        else:
+                            template.total = total - line.quantity
+                            template.save()
                     else:
+                        template = line.product.template
                         template.total = total - line.quantity
                         template.save()
-                else:
-                    template = line.product.template
-                    template.total = total - line.quantity
-                    template.save()
 
         Company = pool.get('company.company')
         company = Company(Transaction().context.get('company'))
@@ -799,7 +800,6 @@ class WizardSalePayment(Wizard):
         else:
             sale.state = 'confirmed'
         sale.save()
-
         return 'end'
 
 
