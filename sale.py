@@ -716,12 +716,17 @@ class WizardSalePayment(Wizard):
         User = pool.get('res.user')
         user = User(Transaction().user)
         limit = user.limit
+        form = self.start
 
         sales = Sale.search_count([('state', '=', 'done')])
         if sales > limit and user.unlimited != True:
             self.raise_user_error(u'Ha excedido el límite de Ventas, contacte con el Administrador de NODUX')
         active_id = Transaction().context.get('active_id', False)
         sale = Sale(active_id)
+
+        if sale.residual_amount > Decimal(0.0):
+            if form.payment_amount > sale.residual_amount:
+                self.raise_user_error('No puede pagar un monto mayor al valor pendiente %s', str(sale.residual_amount ))
 
         if sale.party.customer == True:
             pass
