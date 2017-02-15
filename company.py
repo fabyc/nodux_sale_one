@@ -17,6 +17,7 @@ class Company():
     sequence_sale = fields.Integer('Sequence Sale')
     sucursal = fields.Char('Sucursal')
     emision = fields.Char('Emission Point')
+    default_party = fields.Many2One('party.party', 'Default Client')
 
     @classmethod
     def __setup__(cls):

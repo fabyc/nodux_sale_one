@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "field:company.company,default_party:"
+msgid "Default Client"
+msgstr "Cliente por Defecto"
+
 msgctxt "field:company.company,emision:"
 msgid "Emission Point"
 msgstr "Punto de Emisión"

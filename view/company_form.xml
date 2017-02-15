@@ -8,6 +8,9 @@
             <field name="sucursal"/>
             <label name="emision"/>
             <field name="emision"/>
+            <newline/>
+            <label name="default_party"/>
+            <field name="default_party"/>
         </page>
     </xpath>
 </data>

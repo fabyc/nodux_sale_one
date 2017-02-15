@@ -121,6 +121,12 @@ class Sale(Workflow, ModelSQL, ModelView):
         cls._order.insert(0, ('sale_date', 'DESC'))
         cls._order.insert(1, ('id', 'DESC'))
 
+    @staticmethod
+    def default_party():
+        User = Pool().get('res.user')
+        user = User(Transaction().user)
+        return user.company.default_party.id if user.company and user.company.default_party else None
+
     @classmethod
     def __setup__(cls):
         super(Sale, cls).__setup__()
