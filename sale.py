@@ -728,6 +728,9 @@ class WizardSalePayment(Wizard):
             if form.payment_amount > sale.residual_amount:
                 self.raise_user_error('No puede pagar un monto mayor al valor pendiente %s', str(sale.residual_amount ))
 
+        if form.payment_amount > sale.total_amount:
+            self.raise_user_error('No puede pagar un monto mayor al monto total %s', str(sale.total_amount ))
+
         if sale.party.customer == True:
             pass
         else:
