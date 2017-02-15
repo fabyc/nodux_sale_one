@@ -162,6 +162,46 @@ msgctxt "field:sale.payment.form,write_uid:"
 msgid "Write User"
 msgstr "Modificado por Usuario"
 
+msgctxt "field:sale.payments,amount:"
+msgid "Amount"
+msgstr "Monto"
+
+msgctxt "field:sale.payments,create_date:"
+msgid "Create Date"
+msgstr "Fecha de Creación"
+
+msgctxt "field:sale.payments,create_uid:"
+msgid "Create User"
+msgstr "Usuario creación"
+
+msgctxt "field:sale.payments,date:"
+msgid "Date"
+msgstr "Fecha"
+
+msgctxt "field:sale.payments,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:sale.payments,rec_name:"
+msgid "Name"
+msgstr "Nombre"
+
+msgctxt "field:sale.payments,sale:"
+msgid "Sale"
+msgstr "Venta"
+
+msgctxt "field:sale.payments,sequence:"
+msgid "Sequence"
+msgstr "Secuencia"
+
+msgctxt "field:sale.payments,write_date:"
+msgid "Write Date"
+msgstr "Fecha de Modificación"
+
+msgctxt "field:sale.payments,write_uid:"
+msgid "Write User"
+msgstr "Modificado por Usuario"
+
 msgctxt "field:sale.sale,comment:"
 msgid "Comment"
 msgstr "Comentario"
@@ -213,6 +253,10 @@ msgstr "Cliente"
 msgctxt "field:sale.sale,party_lang:"
 msgid "Party Language"
 msgstr "Idioma del tercero"
+
+msgctxt "field:sale.sale,payments:"
+msgid "Payments"
+msgstr "Pagos"
 
 msgctxt "field:sale.sale,rec_name:"
 msgid "Name"
@@ -270,6 +314,10 @@ msgctxt "field:sale.sale,write_uid:"
 msgid "Write User"
 msgstr "Modificado por Usuario"
 
+msgctxt "model:ir.action,name:act_party_receivable_form"
+msgid "Por Cobrar"
+msgstr ""
+
 msgctxt "model:ir.action,name:act_receivable_form"
 msgid "Por cobrar"
 msgstr ""
@@ -277,6 +325,14 @@ msgstr ""
 msgctxt "model:ir.action,name:act_sale_form"
 msgid "POS Sales"
 msgstr "Venta TPV"
+
+msgctxt "model:ir.action,name:act_sale_relate_form"
+msgid "Venta"
+msgstr ""
+
+msgctxt "model:ir.action,name:report_sale_payment"
+msgid "Report Payments"
+msgstr "Comprobante de Pago"
 
 msgctxt "model:ir.action,name:report_sale_pos"
 msgid "Sale"
@@ -353,6 +409,10 @@ msgctxt "model:sale.payment.form,name:"
 msgid "Sale Payment Form"
 msgstr "Formulario de Pago de Venta"
 
+msgctxt "model:sale.payments,name:"
+msgid "Statement Line"
+msgstr "Pagos"
+
 msgctxt "model:sale.sale,name:"
 msgid "Sale"
 msgstr "Venta"
@@ -419,6 +479,74 @@ msgstr ""
 
 msgctxt "odt:nodux_sale_one.report_sales:"
 msgid "]"
+msgstr ""
+
+msgctxt "odt:sale.sale_payment_report:"
+msgid ":"
+msgstr ""
+
+msgctxt "odt:sale.sale_payment_report:"
+msgid "C.I./RUC"
+msgstr ""
+
+msgctxt "odt:sale.sale_payment_report:"
+msgid "COMPROBANTE DE PAGO"
+msgstr ""
+
+msgctxt "odt:sale.sale_payment_report:"
+msgid "Cliente:"
+msgstr ""
+
+msgctxt "odt:sale.sale_payment_report:"
+msgid "Dirección"
+msgstr ""
+
+msgctxt "odt:sale.sale_payment_report:"
+msgid "Factura"
+msgstr ""
+
+msgctxt "odt:sale.sale_payment_report:"
+msgid "Fecha"
+msgstr ""
+
+msgctxt "odt:sale.sale_payment_report:"
+msgid "Monto."
+msgstr ""
+
+msgctxt "odt:sale.sale_payment_report:"
+msgid "Nodux - (07) 2 560215 - 0999323367 - hola@nodux.e"
+msgstr ""
+
+msgctxt "odt:sale.sale_payment_report:"
+msgid "Nodux Cía. Ltda.: (07) 2 560215 – 0999323367 – hola@nodux.ec"
+msgstr ""
+
+msgctxt "odt:sale.sale_payment_report:"
+msgid "PAGADO:"
+msgstr ""
+
+msgctxt "odt:sale.sale_payment_report:"
+msgid "PENDIENTE:"
+msgstr ""
+
+msgctxt "odt:sale.sale_payment_report:"
+msgid "Sistema"
+msgstr ""
+
+msgctxt "odt:sale.sale_payment_report:"
+msgid "Teléfono"
+msgstr ""
+
+msgctxt "odt:sale.sale_payment_report:"
+msgid "Venta"
+msgstr ""
+
+msgctxt "odt:sale.sale_payment_report:"
+msgid "c"
+msgstr "c"
+
+msgctxt "odt:sale.sale_payment_report:"
+msgid "de Pago"
 msgstr ""
 
 msgctxt "odt:sale.sale_pos:"
@@ -617,6 +745,14 @@ msgctxt "view:sale.payment.form:"
 msgid "Sale Payment Form"
 msgstr "Formulario de pago de venta"
 
+msgctxt "view:sale.payments:"
+msgid "Payments"
+msgstr "Pagos"
+
+msgctxt "view:sale.payments:"
+msgid "Payments Line"
+msgstr "Lineas de Pago"
+
 msgctxt "view:sale.sale:"
 msgid "Anull"
 msgstr "Anular"
@@ -632,6 +768,10 @@ msgstr "Otra Información"
 msgctxt "view:sale.sale:"
 msgid "Paid Amount"
 msgstr "Total Pagado"
+
+msgctxt "view:sale.sale:"
+msgid "Payments"
+msgstr "Pagos"
 
 msgctxt "view:sale.sale:"
 msgid "Pos Cash Sales"

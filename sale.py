@@ -26,7 +26,8 @@ import time
 
 
 __all__ = ['Sale', 'SaleLine','SalePaymentForm', 'WizardSalePayment',
-'SaleReportPos', 'PrintReportSalesStart', 'PrintReportSales', 'ReportSales']
+'SaleReportPos', 'PrintReportSalesStart', 'PrintReportSales', 'ReportSales',
+'StatementLine', 'SalePaymentReport']
 
 _ZERO = Decimal(0)
 
@@ -109,6 +110,7 @@ class Sale(Workflow, ModelSQL, ModelView):
     residual_amount = fields.Numeric('Residual Amount', readonly=True)
     days = fields.Integer('Credit days')
     state_date = fields.Function(fields.Char('State dy Date', readonly=True), 'get_state_date')
+    payments = fields.One2Many('sale.payments', 'sale', 'Payments', readonly=True)
 
     @classmethod
     def __register__(cls, module_name):
@@ -354,6 +356,15 @@ class Sale(Workflow, ModelSQL, ModelView):
     @ModelView.button_action('nodux_sale_one.wizard_sale_payment')
     def wizard_sale_payment(cls, sales):
         pass
+
+class StatementLine(ModelSQL, ModelView):
+    'Statement Line'
+    __name__ = 'sale.payments'
+
+    sequence = fields.Integer('Sequence')
+    sale = fields.Many2One('sale.sale', 'Sale', ondelete='RESTRICT')
+    date = fields.Date('Date', readonly=True)
+    amount = fields.Numeric('Amount', readonly = True)
 
 class SaleLine(ModelSQL, ModelView):
     'Sale Line'
@@ -714,6 +725,7 @@ class WizardSalePayment(Wizard):
         Date = pool.get('ir.date')
         Sale = pool.get('sale.sale')
         User = pool.get('res.user')
+        Payment = pool.get('sale.payments')
         user = User(Transaction().user)
         limit = user.limit
         form = self.start
@@ -822,6 +834,13 @@ class WizardSalePayment(Wizard):
         else:
             sale.state = 'confirmed'
         sale.save()
+
+        payment = Payment()
+        payment.sale = sale
+        payment.amount = form.payment_amount
+        payment.date = Date.today()
+        payment.save()
+
         return 'end'
 
 
@@ -1019,3 +1038,20 @@ class ReportSales(Report):
 
 
         return super(ReportSales, cls).parse(report, objects, data, localcontext)
+
+class SalePaymentReport(Report):
+    __name__ = 'sale.sale_payment_report'
+
+    @classmethod
+    def parse(cls, report, records, data, localcontext):
+        pool = Pool()
+        User = pool.get('res.user')
+        Sale = pool.get('sale.sale')
+        sale = records[0]
+
+        user = User(Transaction().user)
+        localcontext['user'] = user
+        localcontext['company'] = user.company
+
+        return super(SalePaymentReport, cls).parse(report, records, data,
+                localcontext=localcontext)
