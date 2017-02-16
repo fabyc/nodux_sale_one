@@ -121,6 +121,17 @@ class Sale(Workflow, ModelSQL, ModelView):
         cls._order.insert(0, ('sale_date', 'DESC'))
         cls._order.insert(1, ('id', 'DESC'))
 
+    @classmethod
+    def delete(cls, sales):
+        for sale in sales:
+            if (sale.state == 'confirmed'):
+                cls.raise_user_error('No puede eliminar la venta %s,\nporque ya ha sido confirmada',(sale.reference))
+            if (sale.state == 'done'):
+                cls.raise_user_error('No puede eliminar la venta %s,\nporque ya ha sido realizada',(sale.reference))
+            if (sale.state == 'anulled'):
+                cls.raise_user_error('No puede eliminar la venta %s,\nporque ha sido anulada',(sale.reference))
+        super(Sale, cls).delete(sales)
+
     @staticmethod
     def default_party():
         User = Pool().get('res.user')
