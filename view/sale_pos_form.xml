@@ -13,6 +13,8 @@ The COPYRIGHT file at the top level of this repository contains the full copyrig
             <field name="party"/>
             <label name="sale_date"/>
             <field name="sale_date"/>
+            <label name="days"/>
+            <field name="days"/>
             <separator colspan="2" id="amount_info"/>
             <label name="untaxed_amount"/>
             <field name="untaxed_amount"/>
@@ -25,6 +27,10 @@ The COPYRIGHT file at the top level of this repository contains the full copyrig
             <field name="paid_amount"/>
             <label name="residual_amount"/>
             <field name="residual_amount"/>
+        </page>
+        <page string="Payments" col="2" id="payments">
+          <field name="payments" colspan="2"
+              view_ids="nodux_sale_one.sale_payment_line_view_tree"/>
         </page>
         <page string="Comment" id="comment" col="2">
             <field name="comment"/>
@@ -40,6 +46,8 @@ The COPYRIGHT file at the top level of this repository contains the full copyrig
         <button name="quote" string="Quote" icon="tryton-go-next"/>
         <button name="wizard_sale_payment" string="_Pay"
             icon="tryton-go-next"/>
+        <button name="anull" string="Anull"
+            icon="tryton-cancel"/>
     </group>
     <label name="state"/>
     <field name="state"/>

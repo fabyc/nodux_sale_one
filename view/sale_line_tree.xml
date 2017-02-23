@@ -4,6 +4,8 @@ The COPYRIGHT file at the top level of this repository contains the full copyrig
 <tree string="Lines" sequence="sequence" editable="bottom">
     <field name="product"/>
     <field name="quantity"/>
+    <field name="description" tree_invisible="1"/>
+    <field name="unit_digits" tree_invisible="1"/>
     <field name="unit"/>
     <field name="unit_price"/>
     <field name="unit_price_w_tax"/>

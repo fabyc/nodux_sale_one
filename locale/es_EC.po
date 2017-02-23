@@ -2,6 +2,14 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "field:company.company,default_party:"
+msgid "Default Client"
+msgstr "Cliente por Defecto"
+
+msgctxt "field:company.company,emision:"
+msgid "Emission Point"
+msgstr "Punto de Emisión"
+
 msgctxt "field:company.company,logo:"
 msgid "Logo de su empresa"
 msgstr ""
@@ -10,13 +18,21 @@ msgctxt "field:company.company,sequence_sale:"
 msgid "Sequence Sale"
 msgstr "Secuencia de Venta"
 
+msgctxt "field:company.company,sucursal:"
+msgid "Sucursal"
+msgstr "Sucursal"
+
 msgctxt "field:nodux_sale_one.print_report_sale.start,company:"
 msgid "Company"
 msgstr "Empresa"
 
 msgctxt "field:nodux_sale_one.print_report_sale.start,date:"
 msgid "Sale Date"
-msgstr "Fecha de Venta"
+msgstr "Fecha Inicio"
+
+msgctxt "field:nodux_sale_one.print_report_sale.start,date_end:"
+msgid "Sale Date End"
+msgstr "Fecha Fin"
 
 msgctxt "field:nodux_sale_one.print_report_sale.start,id:"
 msgid "ID"
@@ -150,6 +166,46 @@ msgctxt "field:sale.payment.form,write_uid:"
 msgid "Write User"
 msgstr "Modificado por Usuario"
 
+msgctxt "field:sale.payments,amount:"
+msgid "Amount"
+msgstr "Monto"
+
+msgctxt "field:sale.payments,create_date:"
+msgid "Create Date"
+msgstr "Fecha de Creación"
+
+msgctxt "field:sale.payments,create_uid:"
+msgid "Create User"
+msgstr "Usuario creación"
+
+msgctxt "field:sale.payments,date:"
+msgid "Date"
+msgstr "Fecha"
+
+msgctxt "field:sale.payments,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:sale.payments,rec_name:"
+msgid "Name"
+msgstr "Nombre"
+
+msgctxt "field:sale.payments,sale:"
+msgid "Sale"
+msgstr "Venta"
+
+msgctxt "field:sale.payments,sequence:"
+msgid "Sequence"
+msgstr "Secuencia"
+
+msgctxt "field:sale.payments,write_date:"
+msgid "Write Date"
+msgstr "Fecha de Modificación"
+
+msgctxt "field:sale.payments,write_uid:"
+msgid "Write User"
+msgstr "Modificado por Usuario"
+
 msgctxt "field:sale.sale,comment:"
 msgid "Comment"
 msgstr "Comentario"
@@ -173,6 +229,10 @@ msgstr "Moneda"
 msgctxt "field:sale.sale,currency_digits:"
 msgid "Currency Digits"
 msgstr "Decimales de Moneda"
+
+msgctxt "field:sale.sale,days:"
+msgid "Credit days"
+msgstr "Dias de Crédito"
 
 msgctxt "field:sale.sale,description:"
 msgid "Description"
@@ -198,13 +258,17 @@ msgctxt "field:sale.sale,party_lang:"
 msgid "Party Language"
 msgstr "Idioma del tercero"
 
+msgctxt "field:sale.sale,payments:"
+msgid "Payments"
+msgstr "Pagos"
+
 msgctxt "field:sale.sale,rec_name:"
 msgid "Name"
 msgstr "Nombre"
 
 msgctxt "field:sale.sale,reference:"
-msgid "Reference"
-msgstr "Referencia"
+msgid "Number"
+msgstr "Número"
 
 msgctxt "field:sale.sale,residual_amount:"
 msgid "Residual Amount"
@@ -217,6 +281,10 @@ msgstr "Fecha de Venta"
 msgctxt "field:sale.sale,state:"
 msgid "State"
 msgstr "Estado"
+
+msgctxt "field:sale.sale,state_date:"
+msgid "State dy Date"
+msgstr "Estado por Fecha"
 
 msgctxt "field:sale.sale,tax_amount:"
 msgid "Tax"
@@ -250,20 +318,32 @@ msgctxt "field:sale.sale,write_uid:"
 msgid "Write User"
 msgstr "Modificado por Usuario"
 
-msgctxt "help:company.company,logo:"
-msgid "Logo para RIDE de sus facturas"
+msgctxt "model:ir.action,name:act_party_receivable_form"
+msgid "Por Cobrar"
+msgstr ""
+
+msgctxt "model:ir.action,name:act_receivable_form"
+msgid "Por cobrar"
 msgstr ""
 
 msgctxt "model:ir.action,name:act_sale_form"
 msgid "POS Sales"
 msgstr "Venta TPV"
 
+msgctxt "model:ir.action,name:act_sale_relate_form"
+msgid "Venta"
+msgstr ""
+
+msgctxt "model:ir.action,name:report_sale_payment"
+msgid "Report Payments"
+msgstr "Comprobante de Pago"
+
 msgctxt "model:ir.action,name:report_sale_pos"
 msgid "Sale"
 msgstr "Venta"
 
 msgctxt "model:ir.action,name:report_sales"
-msgid "Reporte Vendedor"
+msgid "Reporte de Ventas"
 msgstr ""
 
 msgctxt "model:ir.action,name:wizard_sale_payment"
@@ -301,6 +381,10 @@ msgctxt ""
 msgid "Quotation"
 msgstr "Cotización"
 
+msgctxt "model:ir.ui.menu,name:menu_receivable_form"
+msgid "Por cobrar"
+msgstr ""
+
 msgctxt "model:ir.ui.menu,name:menu_sale"
 msgid "Sales"
 msgstr "Ventas"
@@ -317,6 +401,10 @@ msgctxt "model:nodux_sale_one.print_report_sale.start,name:"
 msgid "Print Report Sales Start"
 msgstr "Imprimit Reporte de Ventas"
 
+msgctxt "model:res.group,name:group_stock_force"
+msgid "Nodux - Stock Force"
+msgstr "Nodux - Forzar Stock "
+
 msgctxt "model:sale.line,name:"
 msgid "Sale Line"
 msgstr "Linea de Venta"
@@ -325,213 +413,13 @@ msgctxt "model:sale.payment.form,name:"
 msgid "Sale Payment Form"
 msgstr "Formulario de Pago de Venta"
 
+msgctxt "model:sale.payments,name:"
+msgid "Statement Line"
+msgstr "Pagos"
+
 msgctxt "model:sale.sale,name:"
 msgid "Sale"
 msgstr "Venta"
-
-msgctxt "odt:nodux_sale_one.report_sales:"
-msgid "/"
-msgstr ""
-
-msgctxt "odt:nodux_sale_one.report_sales:"
-msgid "Cliente"
-msgstr ""
-
-msgctxt "odt:nodux_sale_one.report_sales:"
-msgid "FECHA DE IMPRESIÓN:"
-msgstr ""
-
-msgctxt "odt:nodux_sale_one.report_sales:"
-msgid "Fecha"
-msgstr ""
-
-msgctxt "odt:nodux_sale_one.report_sales:"
-msgid "IVA"
-msgstr ""
-
-msgctxt "odt:nodux_sale_one.report_sales:"
-msgid "Monto total"
-msgstr ""
-
-msgctxt "odt:nodux_sale_one.report_sales:"
-msgid "Nodux Cía. Ltda."
-msgstr ""
-
-msgctxt "odt:nodux_sale_one.report_sales:"
-msgid "RESUMEN"
-msgstr ""
-
-msgctxt "odt:nodux_sale_one.report_sales:"
-msgid "RESUMEN DE VENTAS"
-msgstr ""
-
-msgctxt "odt:nodux_sale_one.report_sales:"
-msgid "SUBTOTAL 0%"
-msgstr ""
-
-msgctxt "odt:nodux_sale_one.report_sales:"
-msgid "SUBTOTAL 14%"
-msgstr ""
-
-msgctxt "odt:nodux_sale_one.report_sales:"
-msgid "SUBTOTALES"
-msgstr ""
-
-msgctxt "odt:nodux_sale_one.report_sales:"
-msgid "Subtotal"
-msgstr ""
-
-msgctxt "odt:nodux_sale_one.report_sales:"
-msgid "[ PAG."
-msgstr ""
-
-msgctxt "odt:nodux_sale_one.report_sales:"
-msgid "]"
-msgstr ""
-
-msgctxt "odt:sale.sale_pos:"
-msgid "$"
-msgstr ""
-
-msgctxt "odt:sale.sale_pos:"
-msgid "%:"
-msgstr ""
-
-msgctxt "odt:sale.sale_pos:"
-msgid ","
-msgstr ""
-
-msgctxt "odt:sale.sale_pos:"
-msgid "/100"
-msgstr ""
-
-msgctxt "odt:sale.sale_pos:"
-msgid "0"
-msgstr ""
-
-msgctxt "odt:sale.sale_pos:"
-msgid "14"
-msgstr ""
-
-msgctxt "odt:sale.sale_pos:"
-msgid "4"
-msgstr ""
-
-msgctxt "odt:sale.sale_pos:"
-msgid ":"
-msgstr ""
-
-msgctxt "odt:sale.sale_pos:"
-msgid "C.I./"
-msgstr ""
-
-msgctxt "odt:sale.sale_pos:"
-msgid "C.I./RUC"
-msgstr ""
-
-msgctxt "odt:sale.sale_pos:"
-msgid "COTIZACIÓN"
-msgstr ""
-
-msgctxt "odt:sale.sale_pos:"
-msgid "Cant."
-msgstr ""
-
-msgctxt "odt:sale.sale_pos:"
-msgid "Cliente"
-msgstr ""
-
-msgctxt "odt:sale.sale_pos:"
-msgid "Cliente:"
-msgstr ""
-
-msgctxt "odt:sale.sale_pos:"
-msgid "Código"
-msgstr ""
-
-msgctxt "odt:sale.sale_pos:"
-msgid "DOLARES"
-msgstr ""
-
-msgctxt "odt:sale.sale_pos:"
-msgid "Descripción"
-msgstr ""
-
-msgctxt "odt:sale.sale_pos:"
-msgid "Descuento:"
-msgstr ""
-
-msgctxt "odt:sale.sale_pos:"
-msgid "Dirección:"
-msgstr ""
-
-msgctxt "odt:sale.sale_pos:"
-msgid "Fecha:"
-msgstr ""
-
-msgctxt "odt:sale.sale_pos:"
-msgid "Firma Autorizada"
-msgstr ""
-
-msgctxt "odt:sale.sale_pos:"
-msgid "IVA 1"
-msgstr ""
-
-msgctxt "odt:sale.sale_pos:"
-msgid "Nodux - (07) 2 560215 - 0999323367 - hola@nodux.e"
-msgstr ""
-
-msgctxt "odt:sale.sale_pos:"
-msgid "Nodux Cía. Ltda.: (07) 2 560215 – 0999323367 – hola@nodux.ec"
-msgstr ""
-
-msgctxt "odt:sale.sale_pos:"
-msgid "P. Unit."
-msgstr ""
-
-msgctxt "odt:sale.sale_pos:"
-msgid "RUC:"
-msgstr ""
-
-msgctxt "odt:sale.sale_pos:"
-msgid "SON:"
-msgstr ""
-
-msgctxt "odt:sale.sale_pos:"
-msgid "Sistema"
-msgstr ""
-
-msgctxt "odt:sale.sale_pos:"
-msgid "Subt."
-msgstr ""
-
-msgctxt "odt:sale.sale_pos:"
-msgid "Subtotal"
-msgstr ""
-
-msgctxt "odt:sale.sale_pos:"
-msgid "Subtotal:"
-msgstr ""
-
-msgctxt "odt:sale.sale_pos:"
-msgid "TOTAL:"
-msgstr ""
-
-msgctxt "odt:sale.sale_pos:"
-msgid "Teléfono"
-msgstr ""
-
-msgctxt "odt:sale.sale_pos:"
-msgid "_______________"
-msgstr ""
-
-msgctxt "odt:sale.sale_pos:"
-msgid "________________"
-msgstr ""
-
-msgctxt "odt:sale.sale_pos:"
-msgid "c"
-msgstr "c"
 
 msgctxt "selection:sale.line,type:"
 msgid "Line"
@@ -556,14 +444,6 @@ msgstr "Borrador"
 msgctxt "selection:sale.sale,state:"
 msgid "Quotation"
 msgstr "Cotización"
-
-msgctxt "view:company.company:"
-msgid "Logo"
-msgstr ""
-
-msgctxt "view:company.company:"
-msgid "Sequence"
-msgstr "Secuencia"
 
 msgctxt "view:company.company:"
 msgid "Sequence Sale"
@@ -597,6 +477,18 @@ msgctxt "view:sale.payment.form:"
 msgid "Sale Payment Form"
 msgstr "Formulario de pago de venta"
 
+msgctxt "view:sale.payments:"
+msgid "Payments"
+msgstr "Pagos"
+
+msgctxt "view:sale.payments:"
+msgid "Payments Line"
+msgstr "Lineas de Pago"
+
+msgctxt "view:sale.sale:"
+msgid "Anull"
+msgstr "Anular"
+
 msgctxt "view:sale.sale:"
 msgid "Comment"
 msgstr "Comentario"
@@ -606,12 +498,24 @@ msgid "Other Info"
 msgstr "Otra Información"
 
 msgctxt "view:sale.sale:"
+msgid "Paid Amount"
+msgstr "Total Pagado"
+
+msgctxt "view:sale.sale:"
+msgid "Payments"
+msgstr "Pagos"
+
+msgctxt "view:sale.sale:"
 msgid "Pos Cash Sales"
 msgstr "Ventas TPV"
 
 msgctxt "view:sale.sale:"
 msgid "Quote"
 msgstr "Cotizar"
+
+msgctxt "view:sale.sale:"
+msgid "Residual Amount"
+msgstr "Total Pendiente"
 
 msgctxt "view:sale.sale:"
 msgid "Sale"

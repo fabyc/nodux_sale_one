@@ -15,7 +15,9 @@ class Company():
     __name__ = 'company.company'
 
     sequence_sale = fields.Integer('Sequence Sale')
-    logo = fields.Binary('Logo de su empresa', help='Logo para RIDE de sus facturas')
+    sucursal = fields.Char('Sucursal')
+    emision = fields.Char('Emission Point')
+    default_party = fields.Many2One('party.party', 'Default Client')
 
     @classmethod
     def __setup__(cls):
@@ -24,3 +26,11 @@ class Company():
     @staticmethod
     def default_sequence_sale():
         return 1
+
+    @staticmethod
+    def default_sucursal():
+        return '001'
+
+    @staticmethod
+    def default_emision():
+        return '001'

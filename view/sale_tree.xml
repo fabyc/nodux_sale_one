@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!-- This file is part of Tryton.  The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<!--tree string="Sales" colors="If(Equal(Eval('state_date', ''),'vencida'), 'red', 'black')"-->
+<tree string="Sales">
+    <field name="reference"/>
+    <field name="sale_date"/>
+    <field name="party"/>
+    <field name="untaxed_amount"/>
+    <field name="total_amount" sum="Total Amount"/>
+    <field name="paid_amount" sum="Paid Amount"/>
+    <field name="residual_amount" sum="Residual Amount"/>
+    <field name="state"/>
+    <field name="state_date" tree_invisible="1"/>
+</tree>

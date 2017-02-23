@@ -1,8 +1,5 @@
 #! -*- coding: utf8 -*-
 
-# This file is part of sale_pos module for Tryton.
-# The COPYRIGHT file at the top level of this repository contains
-# the full copyright notices and license terms.
 from decimal import Decimal
 from datetime import datetime
 from trytond.model import Workflow, ModelView, ModelSQL, fields
@@ -29,9 +26,9 @@ import time
 
 
 __all__ = ['Sale', 'SaleLine','SalePaymentForm', 'WizardSalePayment',
-'SaleReportPos', 'PrintReportSalesStart', 'PrintReportSales', 'ReportSales']
+'SaleReportPos', 'PrintReportSalesStart', 'PrintReportSales', 'ReportSales',
+'StatementLine', 'SalePaymentReport']
 
-__metaclass__ = PoolMeta
 _ZERO = Decimal(0)
 
 class Sale(Workflow, ModelSQL, ModelView):
@@ -48,10 +45,10 @@ class Sale(Workflow, ModelSQL, ModelView):
                 Eval('context', {}).get('company', -1)),
             ],
         depends=['state'], select=True)
-    reference = fields.Char('Reference', readonly=True, select=True)
+    reference = fields.Char('Number', readonly=True, select=True)
     description = fields.Char('Description',
         states={
-            'readonly': Eval('state') != 'draft',
+            'readonly': ~Eval('state').in_(['draft', 'quotation']),
             },
         depends=['state'])
     state = fields.Selection([
@@ -61,23 +58,14 @@ class Sale(Workflow, ModelSQL, ModelView):
         ('done', 'Done'),
         ('anulled', 'Anulled'),
     ], 'State', readonly=True, required=True)
-    sale_date = fields.Date('Sale Date',
+    sale_date = fields.Date('Sale Date', required=True,
         states={
             'readonly': ~Eval('state').in_(['draft', 'quotation']),
-            'required': ~Eval('state').in_(['draft', 'quotation', 'cancel']),
             },
         depends=['state'])
-    """
-    payment_term = fields.Many2One('account.invoice.payment_term',
-        'Payment Term', required=True, states={
-            'readonly': Eval('state') != 'draft',
-            },
-        depends=['state'])
-    """
     party = fields.Many2One('party.party', 'Party', required=True, select=True,
         states={
-            'readonly': ((Eval('state') != 'draft')
-                | (Eval('lines', [0]) & Eval('party'))),
+            'readonly': ~Eval('state').in_(['draft', 'quotation']),
             },
         depends=['state'])
     party_lang = fields.Function(fields.Char('Party Language'),
@@ -92,7 +80,7 @@ class Sale(Workflow, ModelSQL, ModelView):
     currency_digits = fields.Function(fields.Integer('Currency Digits'),
         'on_change_with_currency_digits')
     lines = fields.One2Many('sale.line', 'sale', 'Lines', states={
-            'readonly': Eval('state') != 'draft',
+            'readonly': ~Eval('state').in_(['draft', 'quotation']),
             },
         depends=['party', 'state'])
     comment = fields.Text('Comment')
@@ -120,24 +108,36 @@ class Sale(Workflow, ModelSQL, ModelView):
 
     paid_amount = fields.Numeric('Paid Amount', readonly=True)
     residual_amount = fields.Numeric('Residual Amount', readonly=True)
+    days = fields.Integer('Credit days')
+    state_date = fields.Function(fields.Char('State dy Date', readonly=True), 'get_state_date')
+    payments = fields.One2Many('sale.payments', 'sale', 'Payments', readonly=True)
 
     @classmethod
     def __register__(cls, module_name):
-        cursor = Transaction().cursor
+        transaction = Transaction()
+        cursor = transaction.connection.cursor()
         sql_table = cls.__table__()
 
         super(Sale, cls).__register__(module_name)
         cls._order.insert(0, ('sale_date', 'DESC'))
         cls._order.insert(1, ('id', 'DESC'))
 
-
     @classmethod
     def __setup__(cls):
         super(Sale, cls).__setup__()
+        cls._transitions |= set((
+                ('draft', 'quotation'),
+                ('draft', 'confirmed'),
+                ('draft', 'done'),
+                ('quotation', 'confirmed'),
+                ('quotation', 'done'),
+                ('confirmed', 'done'),
+                ('done', 'anulled'),
+                ))
 
         cls._buttons.update({
                 'wizard_sale_payment': {
-                    'invisible': Eval('state') == 'done',
+                    'invisible': (Eval('state').in_(['done', 'anulled'])),
                     'readonly': Not(Bool(Eval('lines'))),
                     },
                 'quote': {
@@ -145,15 +145,72 @@ class Sale(Workflow, ModelSQL, ModelView):
                     'readonly': ~Eval('lines', []),
                     },
                 'anull': {
-                    'invisible': Eval('state') == 'draft',
+                    'invisible': (Eval('state').in_(['draft', 'anulled', 'confirm'])),
                     'readonly': Not(Bool(Eval('lines'))),
                     },
                 })
+
         cls._states_cached = ['confirmed', 'processing', 'done', 'cancel']
+
+    @classmethod
+    def delete(cls, sales):
+        for sale in sales:
+            if (sale.state == 'confirmed'):
+                cls.raise_user_error('No puede eliminar la venta %s,\nporque ya ha sido confirmada',(sale.reference))
+            if (sale.state == 'done'):
+                cls.raise_user_error('No puede eliminar la venta %s,\nporque ya ha sido realizada',(sale.reference))
+            if (sale.state == 'anulled'):
+                cls.raise_user_error('No puede eliminar la venta %s,\nporque ha sido anulada',(sale.reference))
+        super(Sale, cls).delete(sales)
+
+    @staticmethod
+    def default_party():
+        User = Pool().get('res.user')
+        user = User(Transaction().user)
+        return user.company.default_party.id if user.company and user.company.default_party else None
+
+    @classmethod
+    def copy(cls, sales, default=None):
+        Date = Pool().get('ir.date')
+        date = Date.today()
+        if default is None:
+            default = {}
+        default = default.copy()
+        default['state'] = 'draft'
+        default['reference'] = None
+        default['paid_amount'] = Decimal(0.0)
+        default['residual_amount'] = None
+        default['sale_date'] = date
+        return super(Sale, cls).copy(sales, default=default)
+
+    @classmethod
+    def get_state_date(cls, sales, names):
+        pool = Pool()
+        Date = pool.get('ir.date')
+        date = Date.today()
+        result = {n: {s.id: Decimal(0) for s in sales} for n in names}
+        for name in names:
+            for sale in sales:
+                days = (date - sale.sale_date).days
+                if sale.days >= days:
+                    result[name][sale.id] = ''
+                else:
+                    result[name][sale.id] = 'vencida'
+
+        return result
 
     @staticmethod
     def default_company():
         return Transaction().context.get('company')
+
+    @staticmethod
+    def default_days():
+        return 0
+
+    @staticmethod
+    def default_sale_date():
+        date = Pool().get('ir.date')
+        return date.today()
 
     @staticmethod
     def default_paid_amount():
@@ -193,27 +250,26 @@ class Sale(Workflow, ModelSQL, ModelView):
 
     @fields.depends('lines', 'currency', 'party')
     def on_change_lines(self):
-        res = {
-            'untaxed_amount': Decimal('0.0'),
-            'tax_amount': Decimal('0.0'),
-            'total_amount': Decimal('0.0'),
-            }
+        self.untaxed_amount = Decimal('0.0')
+        self.tax_amount = Decimal('0.0')
+        self.total_amount = Decimal('0.0')
+
         if self.lines:
-            res['untaxed_amount'] = reduce(lambda x, y: x + y,
+            self.untaxed_amount = reduce(lambda x, y: x + y,
                 [(getattr(l, 'amount', None) or Decimal(0))
                     for l in self.lines if l.type == 'line'], Decimal(0)
                 )
-            res['total_amount'] = reduce(lambda x, y: x + y,
+            self.total_amount = reduce(lambda x, y: x + y,
                 [(getattr(l, 'amount_w_tax', None) or Decimal(0))
                     for l in self.lines if l.type == 'line'], Decimal(0)
                 )
+
         if self.currency:
-            res['untaxed_amount'] = self.currency.round(res['untaxed_amount'])
-            res['total_amount'] = self.currency.round(res['total_amount'])
-        res['tax_amount'] = res['total_amount'] - res['untaxed_amount']
+            self.untaxed_amount = self.currency.round(self.untaxed_amount)
+            self.total_amount = self.currency.round(self.total_amount)
+        self.tax_amount = self.total_amount - self.untaxed_amount
         if self.currency:
-            res['tax_amount'] = self.currency.round(res['tax_amount'])
-        return res
+            self.tax_amount = self.currency.round(self.tax_amount)
 
 
     def get_tax_amount(self):
@@ -237,7 +293,7 @@ class Sale(Workflow, ModelSQL, ModelView):
                 value = Decimal(0.14)
             else:
                 value = Decimal(0.0)
-            tax = line.unit_price * value
+            tax = (line.unit_price*Decimal(line.quantity)) * value
             taxes += tax
 
         return (self.currency.round(taxes))
@@ -302,14 +358,30 @@ class Sale(Workflow, ModelSQL, ModelView):
     @ModelView.button
     @Workflow.transition('anulled')
     def anull(cls, sales):
+        for sale in sales:
+            for line in sale.lines:
+                product = line.product.template
+                if product.type == "goods":
+                    product.total = line.product.template.total + line.quantity
+                    product.save()
         cls.write([s for s in sales], {
                 'state': 'anulled',
                 })
+
 
     @classmethod
     @ModelView.button_action('nodux_sale_one.wizard_sale_payment')
     def wizard_sale_payment(cls, sales):
         pass
+
+class StatementLine(ModelSQL, ModelView):
+    'Statement Line'
+    __name__ = 'sale.payments'
+
+    sequence = fields.Integer('Sequence')
+    sale = fields.Many2One('sale.sale', 'Sale', ondelete='RESTRICT')
+    date = fields.Date('Date', readonly=True)
+    amount = fields.Numeric('Amount', readonly = True)
 
 class SaleLine(ModelSQL, ModelView):
     'Sale Line'
@@ -402,6 +474,14 @@ class SaleLine(ModelSQL, ModelView):
         return 'line'
 
     @staticmethod
+    def default_quantity():
+        return 1
+
+    @staticmethod
+    def default_unit_digits():
+        return 2
+
+    @staticmethod
     def default_sale():
         if Transaction().context.get('sale'):
             return Transaction().context.get('sale')
@@ -445,7 +525,8 @@ class SaleLine(ModelSQL, ModelView):
         if self.unit:
             context['uom'] = self.unit.id
         else:
-            context['uom'] = self.product.default_uom.id
+            if self.product:
+                context['uom'] = self.product.default_uom.id
         return context
 
     @fields.depends('currency')
@@ -476,9 +557,7 @@ class SaleLine(ModelSQL, ModelView):
     def on_change_product(self):
         Product = Pool().get('product.product')
         if not self.product:
-            return {}
-        res = {}
-
+            pass
         party = None
         party_context = {}
         if self.sale and self.sale.party:
@@ -488,46 +567,39 @@ class SaleLine(ModelSQL, ModelView):
 
         category = self.product.default_uom.category
         if not self.unit or self.unit not in category.uoms:
-            res['unit'] = self.product.default_uom.id
+            self.unit = self.product.default_uom.id
             self.unit = self.product.default_uom
-            res['unit.rec_name'] = self.product.default_uom.rec_name
-            res['unit_digits'] = self.product.default_uom.digits
+            self.unit.rec_name = self.product.default_uom.rec_name
+            self.unit_digits = self.product.default_uom.digits
 
         with Transaction().set_context(self._get_context_sale_price()):
-            res['unit_price'] = Product.get_sale_price([self.product],
+            self.unit_price = Product.get_sale_price([self.product],
                     self.quantity or 0)[self.product.id]
-            if res['unit_price']:
-                res['unit_price'] = res['unit_price'].quantize(
+            if self.unit_price:
+                self.unit_price = self.unit_price.quantize(
                     Decimal(1) / 10 ** self.__class__.unit_price.digits[1])
-        if not self.description:
-            with Transaction().set_context(party_context):
-                res['description'] = Product(self.product.id).rec_name
 
-        self.unit_price = res['unit_price']
+        self.unit_price = self.unit_price
         self.type = 'line'
-        res['amount'] = self.on_change_with_amount()
-        res['description'] =  Product(self.product.id).name
-        return res
+        self.amount = self.on_change_with_amount()
+        self.description =  self.product.name
 
 
     @fields.depends('product', 'quantity', 'unit',
         '_parent_sale.currency', '_parent_sale.party',
-        '_parent_sale.sale_date')
+        '_parent_sale.sale_date', 'description')
     def on_change_quantity(self):
         Product = Pool().get('product.product')
 
-        if not self.product:
-            return {}
-        res = {}
+        if self.product:
+            with Transaction().set_context(
+                    self._get_context_sale_price()):
+                self.unit_price = Product.get_sale_price([self.product],
+                    self.quantity or 0)[self.product.id]
+                if self.unit_price:
+                    self.unit_price = self.unit_price.quantize(
+                        Decimal(1) / 10 ** self.__class__.unit_price.digits[1])
 
-        with Transaction().set_context(
-                self._get_context_sale_price()):
-            res['unit_price'] = Product.get_sale_price([self.product],
-                self.quantity or 0)[self.product.id]
-            if res['unit_price']:
-                res['unit_price'] = res['unit_price'].quantize(
-                    Decimal(1) / 10 ** self.__class__.unit_price.digits[1])
-        return res
 
     @fields.depends('type', 'quantity', 'unit_price', 'unit',
         '_parent_sale.currency')
@@ -564,7 +636,7 @@ class SaleLine(ModelSQL, ModelView):
             else:
                 value = Decimal(0.0)
 
-            tax_amount = line.unit_price * value
+            tax_amount = (line.unit_price * Decimal(line.quantity)) * value
             return line.get_amount(None) + tax_amount
 
         for line in lines:
@@ -644,10 +716,16 @@ class WizardSalePayment(Wizard):
         Sale = pool.get('sale.sale')
         sale = Sale(Transaction().context['active_id'])
 
-        if sale.residual_amount > Decimal(0.0):
-            payment_amount = sale.residual_amount
+        if sale.days > 0:
+            if sale.residual_amount > Decimal(0.0):
+                payment_amount = sale.residual_amount
+            else:
+                payment_amount = Decimal(0.0)
         else:
-            payment_amount = sale.total_amount
+            if sale.residual_amount > Decimal(0.0):
+                payment_amount = sale.residual_amount
+            else:
+                payment_amount = sale.total_amount
         return {
             'payment_amount': payment_amount,
             'currency_digits': sale.currency_digits,
@@ -659,8 +737,10 @@ class WizardSalePayment(Wizard):
         Date = pool.get('ir.date')
         Sale = pool.get('sale.sale')
         User = pool.get('res.user')
+        Payment = pool.get('sale.payments')
         user = User(Transaction().user)
         limit = user.limit
+        form = self.start
 
         sales = Sale.search_count([('state', '=', 'done')])
         if sales > limit and user.unlimited != True:
@@ -668,14 +748,89 @@ class WizardSalePayment(Wizard):
         active_id = Transaction().context.get('active_id', False)
         sale = Sale(active_id)
 
+        if sale.residual_amount > Decimal(0.0):
+            if form.payment_amount > sale.residual_amount:
+                self.raise_user_error('No puede pagar un monto mayor al valor pendiente %s', str(sale.residual_amount ))
+
+        if form.payment_amount > sale.total_amount:
+            self.raise_user_error('No puede pagar un monto mayor al monto total %s', str(sale.total_amount ))
+
+        if sale.party.customer == True:
+            pass
+        else:
+            party = sale.party
+            party.customer = True
+            party.save()
+
+        for line in sale.lines:
+            if (sale.state == 'draft') | (sale.state == 'quotation'):
+                if line.product.template.type == "goods":
+                    total = line.product.template.total
+                    if (total <= 0)| (line.quantity > total):
+                        origin = str(sale)
+                        def in_group():
+                            pool = Pool()
+                            ModelData = pool.get('ir.model.data')
+                            User = pool.get('res.user')
+                            Group = pool.get('res.group')
+                            Module = pool.get('ir.module.module')
+                            group = Group(ModelData.get_id('nodux_sale_one',
+                                            'group_stock_force'))
+                            transaction = Transaction()
+                            user_id = transaction.user
+                            if user_id == 0:
+                                user_id = transaction.context.get('user', user_id)
+                            if user_id == 0:
+                                return True
+                            user = User(user_id)
+                            return origin and group in user.groups
+                        if not in_group():
+                            self.raise_user_error('No tiene Stock del Producto %s', line.product.name)
+                        else:
+                            self.raise_user_warning('no_stock_%s' % line.id,
+                                   'No hay stock suficiente del producto: "%s"'
+                                'para realizar la venta.', (line.product.name))
+
+                        template = line.product.template
+                        if total == None:
+                            template.total = (line.quantity * -1)
+                            template.save()
+                        else:
+                            template.total = total - line.quantity
+                            template.save()
+                    else:
+                        template = line.product.template
+                        template.total = total - line.quantity
+                        template.save()
+
         Company = pool.get('company.company')
         company = Company(Transaction().context.get('company'))
 
         if not sale.reference:
             reference = company.sequence_sale
+            sucursal = company.sucursal
+            emision = company.emision
             company.sequence_sale = company.sequence_sale + 1
             company.save()
-            sale.reference = str(reference)
+
+            if len(str(reference)) == 1:
+                reference_end = '00000000' + str(reference)
+            elif len(str(reference)) == 2:
+                reference_end = '0000000' + str(reference)
+            elif len(str(reference)) == 3:
+                reference_end = '000000' + str(reference)
+            elif len(str(reference)) == 4:
+                reference_end = '00000' + str(reference)
+            elif len(str(reference)) == 5:
+                reference_end = '0000' + str(reference)
+            elif len(str(reference)) == 6:
+                reference_end = '000' + str(reference)
+            elif len(str(reference)) == 7:
+                reference_end = '00' + str(reference)
+            elif len(str(reference)) == 8:
+                reference_end = '0' + str(reference)
+
+            sale.reference = str(sucursal)+'-'+str(emision)+'-'+reference_end
 
         form = self.start
 
@@ -692,6 +847,12 @@ class WizardSalePayment(Wizard):
             sale.state = 'confirmed'
         sale.save()
 
+        payment = Payment()
+        payment.sale = sale
+        payment.amount = form.payment_amount
+        payment.date = Date.today()
+        payment.save()
+
         return 'end'
 
 
@@ -699,7 +860,11 @@ class SaleReportPos(Report):
     __name__ = 'sale.sale_pos'
 
     @classmethod
-    def parse(cls, report, records, data, localcontext):
+    def __setup__(cls):
+        super(SaleReportPos, cls).__setup__()
+
+    @classmethod
+    def get_context(cls, records, data):
         pool = Pool()
         User = pool.get('res.user')
         Sale = pool.get('sale.sale')
@@ -712,15 +877,17 @@ class SaleReportPos(Report):
             decimales='0.0'
 
         user = User(Transaction().user)
-        localcontext['user'] = user
-        localcontext['company'] = user.company
-        localcontext['subtotal_0'] = cls._get_subtotal_0(Sale, sale)
-        localcontext['subtotal_12'] = cls._get_subtotal_12(Sale, sale)
-        localcontext['subtotal_14'] = cls._get_subtotal_14(Sale, sale)
-        localcontext['amount2words']=cls._get_amount_to_pay_words(Sale, sale)
-        localcontext['decimales'] = decimales
-        return super(SaleReportPos, cls).parse(report, records, data,
-                localcontext=localcontext)
+        report_context = super(SaleReportPos, cls).get_context(records, data)
+        report_context['user'] = user
+        report_context['company'] = user.company
+        report_context['subtotal_0'] = cls._get_subtotal_0(Sale, sale)
+        report_context['subtotal_12'] = cls._get_subtotal_12(Sale, sale)
+        report_context['subtotal_14'] = cls._get_subtotal_14(Sale, sale)
+        report_context['amount2words']=cls._get_amount_to_pay_words(Sale, sale)
+        report_context['decimales'] = decimales
+
+        return report_context
+
 
     @classmethod
     def _get_amount_to_pay_words(cls, Sale, sale):
@@ -784,6 +951,7 @@ class PrintReportSalesStart(ModelView):
 
     company = fields.Many2One('company.company', 'Company', required=True)
     date = fields.Date("Sale Date", required= True)
+    date_end = fields.Date("Sale Date End", required= True)
 
     @staticmethod
     def default_company():
@@ -791,6 +959,11 @@ class PrintReportSalesStart(ModelView):
 
     @staticmethod
     def default_date():
+        date = Pool().get('ir.date')
+        return date.today()
+
+    @staticmethod
+    def default_date_end():
         date = Pool().get('ir.date')
         return date.today()
 
@@ -808,6 +981,7 @@ class PrintReportSales(Wizard):
         data = {
             'company': self.start.company.id,
             'date' : self.start.date,
+            'date_end' : self.start.date_end,
             }
         return action, data
 
@@ -818,7 +992,11 @@ class ReportSales(Report):
     __name__ = 'nodux_sale_one.report_sales'
 
     @classmethod
-    def parse(cls, report, objects, data, localcontext):
+    def __setup__(cls):
+        super(ReportSales, cls).__setup__()
+
+    @classmethod
+    def get_context(cls, records, data):
         pool = Pool()
         User = pool.get('res.user')
         user = User(Transaction().user)
@@ -826,6 +1004,7 @@ class ReportSales(Report):
         Company = pool.get('company.company')
         Sale = pool.get('sale.sale')
         fecha = data['date']
+        fecha_fin = data['date_end']
         total_ventas =  Decimal(0.0)
         total_iva =  Decimal(0.0)
         subtotal_total =  Decimal(0.0)
@@ -835,7 +1014,7 @@ class ReportSales(Report):
         total_recibido = Decimal(0.0)
         total_por_cobrar = Decimal(0.0)
         company = Company(data['company'])
-        sales = Sale.search([('sale_date', '=', fecha), ('state','!=', 'draft')])
+        sales = Sale.search([('sale_date', '>=', fecha), ('sale_date', '<=', fecha_fin), ('state','in', ['done','confirmed'])])
 
         if sales:
             for s in sales:
@@ -844,7 +1023,8 @@ class ReportSales(Report):
                     total_iva += s.tax_amount
                     subtotal_total += s.untaxed_amount
                     total_recibido += s.paid_amount
-                    total_por_cobrar += s.residual_amount
+                    if s.residual_amount != None:
+                        total_por_cobrar += s.residual_amount
 
                     for line in s.lines:
                         if line.product.taxes_category == True:
@@ -863,17 +1043,43 @@ class ReportSales(Report):
             timezone = pytz.timezone(company.timezone)
             dt = datetime.now()
             hora = datetime.astimezone(dt.replace(tzinfo=pytz.utc), timezone)
+        else:
+            company.raise_user_error('Configure la zona Horaria de la empresa')
 
-        localcontext['company'] = company
-        localcontext['fecha'] = fecha.strftime('%d/%m/%Y')
-        localcontext['hora'] = hora.strftime('%H:%M:%S')
-        localcontext['fecha_im'] = hora.strftime('%d/%m/%Y')
-        localcontext['total_ventas'] = total_ventas
-        localcontext['sales'] = sales
-        localcontext['total_iva'] = total_iva
-        localcontext['subtotal_total'] = subtotal_total
-        localcontext['subtotal14'] = subtotal14
-        localcontext['subtotal0'] = subtotal0
+        report_context = super(ReportSales, cls).get_context(records, data)
 
+        report_context['company'] = company
+        report_context['fecha'] = fecha.strftime('%d/%m/%Y')
+        report_context['fecha_fin'] = fecha_fin.strftime('%d/%m/%Y')
+        report_context['hora'] = hora.strftime('%H:%M:%S')
+        report_context['fecha_im'] = hora.strftime('%d/%m/%Y')
+        report_context['total_ventas'] = total_ventas
+        report_context['sales'] = sales
+        report_context['total_iva'] = total_iva
+        report_context['subtotal_total'] = subtotal_total
+        report_context['subtotal14'] = subtotal14
+        report_context['subtotal0'] = subtotal0
+        return report_context
 
-        return super(ReportSales, cls).parse(report, objects, data, localcontext)
+class SalePaymentReport(Report):
+    __name__ = 'sale.sale_payment_report'
+
+    @classmethod
+    def __setup__(cls):
+        super(SalePaymentReport, cls).__setup__()
+
+    @classmethod
+    def get_context(cls, records, data):
+        pool = Pool()
+        User = pool.get('res.user')
+        Sale = pool.get('sale.sale')
+        sale = records[0]
+
+        user = User(Transaction().user)
+
+        report_context = super(SalePaymentReport, cls).get_context(records, data)
+
+        report_context['user'] = user
+        report_context['company'] = user.company
+
+        return report_context

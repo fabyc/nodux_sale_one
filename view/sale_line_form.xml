@@ -15,8 +15,7 @@ this repository contains the full copyright notices and license terms. -->
                 view_ids="nodux_product_one.product_view_list_sale_line"/>
             <newline/>
             <label name="description"/>
-            <field name="description" colspan="3"
-                spell="Get(Eval('_parent_sale', {}), 'party_lang')"/>
+            <field name="description" colspan="3"/>
             <label name="quantity"/>
             <field name="quantity"/>
             <label name="unit"/>
