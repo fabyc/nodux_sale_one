@@ -618,7 +618,9 @@ class SaleLine(ModelSQL, ModelView):
         pool = Pool()
         amount_w_tax = {}
         unit_price_w_tax = {}
-
+        tax_amount = Decimal(0.0)
+        value = Decimal(0.0)
+        
         def compute_amount_with_tax(line):
 
             if line.product.taxes_category == True:
@@ -636,7 +638,8 @@ class SaleLine(ModelSQL, ModelView):
             else:
                 value = Decimal(0.0)
 
-            tax_amount = (line.unit_price * Decimal(line.quantity)) * value
+            if line.unit_price:
+                tax_amount = (line.unit_price * Decimal(line.quantity)) * value
             return line.get_amount(None) + tax_amount
 
         for line in lines:
@@ -706,6 +709,7 @@ class WizardSalePayment(Wizard):
             Button('Pay', 'pay_', 'tryton-ok', default=True),
         ])
     pay_ = StateTransition()
+    print_ = StateAction('nodux_sale_one.sale.sale_pos')
 
     @classmethod
     def __setup__(cls):
@@ -773,7 +777,7 @@ class WizardSalePayment(Wizard):
                             ModelData = pool.get('ir.model.data')
                             User = pool.get('res.user')
                             Group = pool.get('res.group')
-                            Module = pool.get('ir.module.module')
+                            Module = pool.get('ir.module')
                             group = Group(ModelData.get_id('nodux_sale_one',
                                             'group_stock_force'))
                             transaction = Transaction()
@@ -803,6 +807,7 @@ class WizardSalePayment(Wizard):
                         template.total = total - line.quantity
                         template.save()
 
+
         Company = pool.get('company.company')
         company = Company(Transaction().context.get('company'))
 
@@ -831,7 +836,6 @@ class WizardSalePayment(Wizard):
                 reference_end = '0' + str(reference)
 
             sale.reference = str(sucursal)+'-'+str(emision)+'-'+reference_end
-
         form = self.start
 
         if sale.paid_amount > Decimal(0.0):
