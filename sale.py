@@ -122,23 +122,6 @@ class Sale(Workflow, ModelSQL, ModelView):
         cls._order.insert(1, ('id', 'DESC'))
 
     @classmethod
-    def delete(cls, sales):
-        for sale in sales:
-            if (sale.state == 'confirmed'):
-                cls.raise_user_error('No puede eliminar la venta %s,\nporque ya ha sido confirmada',(sale.reference))
-            if (sale.state == 'done'):
-                cls.raise_user_error('No puede eliminar la venta %s,\nporque ya ha sido realizada',(sale.reference))
-            if (sale.state == 'anulled'):
-                cls.raise_user_error('No puede eliminar la venta %s,\nporque ha sido anulada',(sale.reference))
-        super(Sale, cls).delete(sales)
-
-    @staticmethod
-    def default_party():
-        User = Pool().get('res.user')
-        user = User(Transaction().user)
-        return user.company.default_party.id if user.company and user.company.default_party else None
-
-    @classmethod
     def __setup__(cls):
         super(Sale, cls).__setup__()
         cls._transitions |= set((
@@ -167,6 +150,23 @@ class Sale(Workflow, ModelSQL, ModelView):
                 })
 
         cls._states_cached = ['confirmed', 'processing', 'done', 'cancel']
+
+    @classmethod
+    def delete(cls, sales):
+        for sale in sales:
+            if (sale.state == 'confirmed'):
+                cls.raise_user_error('No puede eliminar la venta %s,\nporque ya ha sido confirmada',(sale.reference))
+            if (sale.state == 'done'):
+                cls.raise_user_error('No puede eliminar la venta %s,\nporque ya ha sido realizada',(sale.reference))
+            if (sale.state == 'anulled'):
+                cls.raise_user_error('No puede eliminar la venta %s,\nporque ha sido anulada',(sale.reference))
+        super(Sale, cls).delete(sales)
+
+    @staticmethod
+    def default_party():
+        User = Pool().get('res.user')
+        user = User(Transaction().user)
+        return user.company.default_party.id if user.company and user.company.default_party else None
 
     @classmethod
     def copy(cls, sales, default=None):
@@ -293,7 +293,7 @@ class Sale(Workflow, ModelSQL, ModelView):
                 value = Decimal(0.14)
             else:
                 value = Decimal(0.0)
-            tax = line.unit_price * value
+            tax = (line.unit_price*Decimal(line.quantity)) * value
             taxes += tax
 
         return (self.currency.round(taxes))
@@ -623,6 +623,8 @@ class SaleLine(ModelSQL, ModelView):
         pool = Pool()
         amount_w_tax = {}
         unit_price_w_tax = {}
+        tax_amount = Decimal(0.0)
+        value = Decimal(0.0)
 
         def compute_amount_with_tax(line):
 
@@ -641,7 +643,8 @@ class SaleLine(ModelSQL, ModelView):
             else:
                 value = Decimal(0.0)
 
-            tax_amount = line.unit_price * value
+            if line.unit_price:
+                tax_amount = (line.unit_price * Decimal(line.quantity)) * value
             return line.get_amount(None) + tax_amount
 
         for line in lines:
