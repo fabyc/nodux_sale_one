@@ -364,7 +364,7 @@ class Sale(Workflow, ModelSQL, ModelView):
             for line in sale.lines:
                 product = line.product.template
                 if product.type == "goods":
-                    if line.unit == product.template.default_uom:
+                    if line.unit == product.default_uom:
                         product.total = Decimal(line.product.template.total) + Decimal(line.quantity)
                         product.save()
                     else:
