@@ -748,10 +748,9 @@ class WizardSalePayment(Wizard):
         Sale = pool.get('sale.sale')
         User = pool.get('res.user')
         Payment = pool.get('sale.payments')
-        user = User(Transaction().user)
+        user, = User.search([('id', '=', 1)])
         limit = user.limit
         form = self.start
-
         sales = Sale.search_count([('state', '=', 'done')])
         if sales > limit and user.unlimited != True:
             self.raise_user_error(u'Ha excedido el límite de Ventas, contacte con el Administrador de NODUX')
