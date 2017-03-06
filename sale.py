@@ -718,7 +718,7 @@ class WizardSalePayment(Wizard):
             Button('Pay', 'pay_', 'tryton-ok', default=True),
         ])
     pay_ = StateTransition()
-    print_ = StateAction('nodux_sale_one.sale.sale_pos')
+    print_ = StateAction('nodux_sale_one.report_sale_pos')
 
     @classmethod
     def __setup__(cls):
@@ -903,8 +903,17 @@ class WizardSalePayment(Wizard):
         payment.date = Date.today()
         payment.save()
 
+        return 'print_'
+        return'end'
+
+    def transition_print_(self):
         return 'end'
 
+    def do_print_(self, action):
+        data = {}
+        data['id'] = Transaction().context['active_ids'].pop()
+        data['ids'] = [data['id']]
+        return action, data
 
 class SaleReportPos(Report):
     __name__ = 'sale.sale_pos'
