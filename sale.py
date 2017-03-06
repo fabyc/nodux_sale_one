@@ -746,7 +746,7 @@ class WizardSalePayment(Wizard):
         Sale = pool.get('sale.sale')
         User = pool.get('res.user')
         Payment = pool.get('sale.payments')
-        user = User(Transaction().user)
+        user, = User.search([('id', '=', 1)])
         limit = user.limit
         form = self.start
 
