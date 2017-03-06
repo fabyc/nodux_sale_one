@@ -361,6 +361,8 @@ class Sale(Workflow, ModelSQL, ModelView):
     @Workflow.transition('anulled')
     def anull(cls, sales):
         for sale in sales:
+            cls.raise_user_warning('anull%s' % sale.reference,
+                   'Esta seguro de anular la venta: "%s"', (sale.reference))
             for line in sale.lines:
                 product = line.product.template
                 if product.type == "goods":
