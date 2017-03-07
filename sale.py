@@ -359,15 +359,21 @@ class Sale(Workflow, ModelSQL, ModelView):
     @Workflow.transition('anulled')
     def anull(cls, sales):
         for sale in sales:
+            cls.raise_user_warning('anull%s' % sale.reference,
+                   'Esta seguro de anular la venta: "%s"', (sale.reference))
             for line in sale.lines:
                 product = line.product.template
                 if product.type == "goods":
-                    product.total = line.product.template.total + line.quantity
-                    product.save()
+                    if line.unit == product.default_uom:
+                        product.total = Decimal(line.product.template.total) + Decimal(line.quantity)
+                        product.save()
+                    else:
+                        product.total = Decimal(str(round(Decimal(line.product.template.total + Decimal(line.quantity * line.unit.factor)),8)))
+                        product.save()
+
         cls.write([s for s in sales], {
                 'state': 'anulled',
                 })
-
 
     @classmethod
     @ModelView.button_action('nodux_sale_one.wizard_sale_payment')
@@ -720,7 +726,8 @@ class WizardSalePayment(Wizard):
             Button('Pay', 'pay_', 'tryton-ok', default=True),
         ])
     pay_ = StateTransition()
-
+    print_ = StateAction('nodux_sale_one.report_sale_pos')
+    
     @classmethod
     def __setup__(cls):
         super(WizardSalePayment, cls).__setup__()
@@ -780,42 +787,80 @@ class WizardSalePayment(Wizard):
             if (sale.state == 'draft') | (sale.state == 'quotation'):
                 if line.product.template.type == "goods":
                     total = line.product.template.total
-                    if (total <= 0)| (line.quantity > total):
-                        origin = str(sale)
-                        def in_group():
-                            pool = Pool()
-                            ModelData = pool.get('ir.model.data')
-                            User = pool.get('res.user')
-                            Group = pool.get('res.group')
-                            Module = pool.get('ir.module.module')
-                            group = Group(ModelData.get_id('nodux_sale_one',
-                                            'group_stock_force'))
-                            transaction = Transaction()
-                            user_id = transaction.user
-                            if user_id == 0:
-                                user_id = transaction.context.get('user', user_id)
-                            if user_id == 0:
-                                return True
-                            user = User(user_id)
-                            return origin and group in user.groups
-                        if not in_group():
-                            self.raise_user_error('No tiene Stock del Producto %s', line.product.name)
-                        else:
-                            self.raise_user_warning('no_stock_%s' % line.id,
-                                   'No hay stock suficiente del producto: "%s"'
-                                'para realizar la venta.', (line.product.name))
+                    if line.unit == line.product.template.default_uom:
+                        if (total <= 0)| (line.quantity > total):
+                            origin = str(sale)
+                            def in_group():
+                                pool = Pool()
+                                ModelData = pool.get('ir.model.data')
+                                User = pool.get('res.user')
+                                Group = pool.get('res.group')
+                                Module = pool.get('ir.module.module')
+                                group = Group(ModelData.get_id('nodux_sale_one',
+                                                'group_stock_force'))
+                                transaction = Transaction()
+                                user_id = transaction.user
+                                if user_id == 0:
+                                    user_id = transaction.context.get('user', user_id)
+                                if user_id == 0:
+                                    return True
+                                user = User(user_id)
+                                return origin and group in user.groups
+                            if not in_group():
+                                self.raise_user_error('No tiene Stock del Producto %s', line.product.name)
+                            else:
+                                self.raise_user_warning('no_stock_%s' % line.id,
+                                       'No hay stock suficiente del producto: "%s"'
+                                    'para realizar la venta.', (line.product.name))
 
-                        template = line.product.template
-                        if total == None:
-                            template.total = (line.quantity * -1)
-                            template.save()
+                            template = line.product.template
+                            if total == None:
+                                template.total = Decimal(line.quantity) * Decimal(-1)
+                                template.save()
+                            else:
+                                template.total = Decimal(total) - Decimal(line.quantity)
+                                template.save()
                         else:
-                            template.total = total - line.quantity
+                            template = line.product.template
+                            template.total = Decimal(total) - Decimal(line.quantity)
                             template.save()
                     else:
-                        template = line.product.template
-                        template.total = total - line.quantity
-                        template.save()
+                        if (total <= 0)| ((line.quantity * line.unit.factor) > total):
+                            origin = str(sale)
+                            def in_group():
+                                pool = Pool()
+                                ModelData = pool.get('ir.model.data')
+                                User = pool.get('res.user')
+                                Group = pool.get('res.group')
+                                Module = pool.get('ir.module')
+                                group = Group(ModelData.get_id('nodux_sale_one',
+                                                'group_stock_force'))
+                                transaction = Transaction()
+                                user_id = transaction.user
+                                if user_id == 0:
+                                    user_id = transaction.context.get('user', user_id)
+                                if user_id == 0:
+                                    return True
+                                user = User(user_id)
+                                return origin and group in user.groups
+                            if not in_group():
+                                self.raise_user_error('No tiene Stock del Producto %s', line.product.name)
+                            else:
+                                self.raise_user_warning('no_stock_%s' % line.id,
+                                       'No hay stock suficiente del producto: "%s"'
+                                    'para realizar la venta.', (line.product.name))
+
+                            template = line.product.template
+                            if total == None:
+                                template.total = Decimal(str(round(Decimal(Decimal(line.quantity * line.unit.factor) * Decimal(-1)),8)))
+                                template.save()
+                            else:
+                                template.total = Decimal(str(round(Decimal(total - Decimal(line.quantity * line.unit.factor)),8)))
+                                template.save()
+                        else:
+                            template = line.product.template
+                            template.total = Decimal(str(round(Decimal(total - Decimal(line.quantity * line.unit.factor)),8)))
+                            template.save()
 
         Company = pool.get('company.company')
         company = Company(Transaction().context.get('company'))
@@ -867,8 +912,17 @@ class WizardSalePayment(Wizard):
         payment.date = Date.today()
         payment.save()
 
+        return 'print_'
+        return'end'
+
+    def transition_print_(self):
         return 'end'
 
+    def do_print_(self, action):
+        data = {}
+        data['id'] = Transaction().context['active_ids'].pop()
+        data['ids'] = [data['id']]
+        return action, data
 
 class SaleReportPos(Report):
     __name__ = 'sale.sale_pos'
