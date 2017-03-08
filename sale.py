@@ -946,6 +946,15 @@ class SaleReportPos(Report):
         report_context['subtotal_14'] = cls._get_subtotal_14(Sale, sale)
         report_context['amount2words']=cls._get_amount_to_pay_words(Sale, sale)
         report_context['decimales'] = decimales
+        if user.company.timezone:
+            timezone = pytz.timezone(user.company.timezone)
+            dt = datetime.now()
+            hora = datetime.astimezone(dt.replace(tzinfo=pytz.utc), timezone)
+        else:
+            sale.raise_user_error('Configure la zona Horaria de su empresa')
+
+        report_context['fecha'] = sale.sale_date.strftime('%d/%m/%Y')
+        report_context['hora'] = hora.strftime('%H:%M:%S')
 
         return report_context
 
