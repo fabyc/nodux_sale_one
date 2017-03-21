@@ -108,7 +108,9 @@ class Sale(Workflow, ModelSQL, ModelView):
 
     paid_amount = fields.Numeric('Paid Amount', readonly=True)
     residual_amount = fields.Numeric('Residual Amount', readonly=True)
-    days = fields.Integer('Credit days')
+    days = fields.Integer('Credit days', states={
+            'readonly': ~Eval('state').in_(['draft', 'quotation']),
+            })
     state_date = fields.Function(fields.Char('State dy Date', readonly=True), 'get_state_date')
     payments = fields.One2Many('sale.payments', 'sale', 'Payments', readonly=True)
 
