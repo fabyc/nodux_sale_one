@@ -271,6 +271,17 @@ class Sale(Workflow, ModelSQL, ModelView):
             res['tax_amount'] = self.currency.round(res['tax_amount'])
         return res
 
+    @fields.depends('days', 'party')
+    def on_change_days(self, name=None):
+        res = {}
+        if self.party:
+            if self.party.type_document == '07':
+                res['days'] = 0
+            elif self.party.vat_number == '9999999999999':
+                res['days'] = 0
+            elif self.party.name.lower() == 'consumidor final':
+                res['days'] = 0
+        return res
 
     def get_tax_amount(self):
         tax = _ZERO
@@ -727,7 +738,7 @@ class WizardSalePayment(Wizard):
         ])
     pay_ = StateTransition()
     print_ = StateAction('nodux_sale_one.report_sale_pos')
-    
+
     @classmethod
     def __setup__(cls):
         super(WizardSalePayment, cls).__setup__()
