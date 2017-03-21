@@ -155,6 +155,25 @@ The COPYRIGHT file at the top level of this repository contains the full copyrig
         <menuitem parent="menu_sale" action="wizard_sales_report"
             id="menu_sale_report" icon="tryton-print"/>
 
+        <!--REPORTE DE PAGOS-->
+        <record model="ir.ui.view" id="print_payment_report_start_view_form">
+            <field name="model">nodux_sale_one.print_report_payment.start</field>
+            <field name="type">form</field>
+            <field name="name">payment_report_start_form</field>
+        </record>
+        <record model="ir.action.wizard" id="wizard_payment_report">
+            <field name="name">Reporte de Pagos por Fecha</field>
+            <field name="wiz_name">nodux_sale_one.print_report_payment</field>
+        </record>
+        <record model="ir.action.report" id="report_payments">
+            <field name="name">Reporte de Pagos</field>
+            <field name="model"></field>
+            <field name="report_name">nodux_sale_one.report_payments</field>
+            <field name="report">nodux_sale_one/report_payments.odt</field>
+        </record>
+        <menuitem parent="menu_sale" action="wizard_payment_report"
+            id="menu_payment_report" icon="tryton-print"/>
+
         <!--Reporte de cuentas por cobrar -->
         <record model="ir.ui.view" id="sale_view_tree">
             <field name="model">sale.sale</field>

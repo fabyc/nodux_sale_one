@@ -27,7 +27,8 @@ import time
 
 __all__ = ['Sale', 'SaleLine','SalePaymentForm', 'WizardSalePayment',
 'SaleReportPos', 'PrintReportSalesStart', 'PrintReportSales', 'ReportSales',
-'StatementLine', 'SalePaymentReport']
+'StatementLine', 'SalePaymentReport', 'PrintReportPaymentsStart',
+'PrintReportPayments', 'ReportPayments']
 
 _ZERO = Decimal(0)
 
@@ -1146,6 +1147,91 @@ class ReportSales(Report):
         report_context['subtotal14'] = subtotal14
         report_context['subtotal0'] = subtotal0
         report_context['total_ventas_creditos'] = ventas_credito
+        return report_context
+
+
+class PrintReportPaymentsStart(ModelView):
+    'Print Report Payment Start'
+    __name__ = 'nodux_sale_one.print_report_payment.start'
+
+    company = fields.Many2One('company.company', 'Company', required=True)
+    date = fields.Date("Payment Date", required= True)
+    date_end = fields.Date("Payment Date End", required= True)
+
+    @staticmethod
+    def default_company():
+        return Transaction().context.get('company')
+
+    @staticmethod
+    def default_date():
+        date = Pool().get('ir.date')
+        return date.today()
+
+    @staticmethod
+    def default_date_end():
+        date = Pool().get('ir.date')
+        return date.today()
+
+class PrintReportPayments(Wizard):
+    'Print Report Payments'
+    __name__ = 'nodux_sale_one.print_report_payment'
+    start = StateView('nodux_sale_one.print_report_payment.start',
+        'nodux_sale_one.print_payment_report_start_view_form', [
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Print', 'print_', 'tryton-print', default=True),
+            ])
+    print_ = StateAction('nodux_sale_one.report_payments')
+
+    def do_print_(self, action):
+        data = {
+            'company': self.start.company.id,
+            'date' : self.start.date,
+            'date_end' : self.start.date_end,
+            }
+        return action, data
+
+    def transition_print_(self):
+        return 'end'
+
+class ReportPayments(Report):
+    __name__ = 'nodux_sale_one.report_payments'
+
+    @classmethod
+    def get_context(cls, records, data):
+        pool = Pool()
+        User = pool.get('res.user')
+        user = User(Transaction().user)
+        Date = pool.get('ir.date')
+        Company = pool.get('company.company')
+        Sale = pool.get('sale.sale')
+        Payments = pool.get('sale.payments')
+        fecha = data['date']
+        fecha_fin = data['date_end']
+        total_pagos = Decimal(0.0)
+        company = Company(data['company'])
+        payments = Payments.search([('date', '>=', fecha), ('date', '<=', fecha_fin), ('amount', '>', 0)])
+
+        if payments:
+            for p in payments:
+                if p.sale.days > 0:
+                    if p.amount > Decimal(0.0):
+                        total_pagos += p.amount
+
+        if company.timezone:
+            timezone = pytz.timezone(company.timezone)
+            dt = datetime.now()
+            hora = datetime.astimezone(dt.replace(tzinfo=pytz.utc), timezone)
+        else:
+            company.raise_user_error('Configure la zona Horaria de la empresa')
+
+        report_context = super(ReportPayments, cls).get_context(records, data)
+        report_context['company'] = company
+        report_context['fecha'] = fecha.strftime('%d/%m/%Y')
+        report_context['fecha_fin'] = fecha_fin.strftime('%d/%m/%Y')
+        report_context['hora'] = hora.strftime('%H:%M:%S')
+        report_context['fecha_im'] = hora.strftime('%d/%m/%Y')
+        report_context['payments'] = payments
+        report_context['total_pagos'] = total_pagos
         return report_context
 
 class SalePaymentReport(Report):

@@ -15,13 +15,16 @@ def register():
         PrintReportSalesStart,
         User,
         StatementLine,
+        PrintReportPaymentsStart,
         module='nodux_sale_one', type_='model')
     Pool.register(
         WizardSalePayment,
         PrintReportSales,
+        PrintReportPayments,
         module='nodux_sale_one', type_='wizard')
     Pool.register(
         SaleReportPos,
         ReportSales,
         SalePaymentReport,
+        ReportPayments,
         module='nodux_sale_one', type_='report')

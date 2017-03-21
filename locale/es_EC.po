@@ -22,6 +22,22 @@ msgctxt "field:company.company,sucursal:"
 msgid "Sucursal"
 msgstr "Sucursal"
 
+msgctxt "field:nodux_sale_one.print_report_payment.start,company:"
+msgid "Company"
+msgstr "Empresa"
+
+msgctxt "field:nodux_sale_one.print_report_payment.start,date:"
+msgid "Payment Date"
+msgstr "Fecha de Pago"
+
+msgctxt "field:nodux_sale_one.print_report_payment.start,date_end:"
+msgid "Payment Date End"
+msgstr "Fecha Fin Pago"
+
+msgctxt "field:nodux_sale_one.print_report_payment.start,id:"
+msgid "ID"
+msgstr "ID"
+
 msgctxt "field:nodux_sale_one.print_report_sale.start,company:"
 msgid "Company"
 msgstr "Empresa"
@@ -334,6 +350,10 @@ msgctxt "model:ir.action,name:act_sale_relate_form"
 msgid "Venta"
 msgstr ""
 
+msgctxt "model:ir.action,name:report_payments"
+msgid "Reporte de Pagos"
+msgstr ""
+
 msgctxt "model:ir.action,name:report_sale_payment"
 msgid "Report Payments"
 msgstr "Comprobante de Pago"
@@ -346,10 +366,15 @@ msgctxt "model:ir.action,name:report_sales"
 msgid "Reporte de Ventas"
 msgstr ""
 
+msgctxt "model:ir.action,name:wizard_payment_report"
+msgid "Reporte de Pagos por Fecha"
+msgstr ""
+
 msgctxt "model:ir.action,name:wizard_sale_payment"
 msgid "Pay"
 msgstr "Pagar"
 
+#, fuzzy
 msgctxt "model:ir.action,name:wizard_sales_report"
 msgid "Reporte de Ventas por fecha"
 msgstr ""
@@ -381,6 +406,10 @@ msgctxt ""
 msgid "Quotation"
 msgstr "Cotización"
 
+msgctxt "model:ir.ui.menu,name:menu_payment_report"
+msgid "Reporte de Pagos por Fecha"
+msgstr ""
+
 msgctxt "model:ir.ui.menu,name:menu_receivable_form"
 msgid "Por cobrar"
 msgstr ""
@@ -393,9 +422,14 @@ msgctxt "model:ir.ui.menu,name:menu_sale_pos"
 msgid "POS Sales"
 msgstr "Venta TPV"
 
+#, fuzzy
 msgctxt "model:ir.ui.menu,name:menu_sale_report"
 msgid "Reporte de Ventas por fecha"
-msgstr ""
+msgstr "Reporte de Inventario"
+
+msgctxt "model:nodux_sale_one.print_report_payment.start,name:"
+msgid "Print Report Payment Start"
+msgstr "Imprimir Reporte de Pago"
 
 msgctxt "model:nodux_sale_one.print_report_sale.start,name:"
 msgid "Print Report Sales Start"
@@ -420,6 +454,422 @@ msgstr "Pagos"
 msgctxt "model:sale.sale,name:"
 msgid "Sale"
 msgstr "Venta"
+
+msgctxt "report:nodux_sale_one.report_payments:"
+msgid "-"
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_payments:"
+msgid "/"
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_payments:"
+msgid "Cliente"
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_payments:"
+msgid "FECHA DE IMPRESIÓN:"
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_payments:"
+msgid "Factura"
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_payments:"
+msgid "Fecha"
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_payments:"
+msgid "Nodux Cía. Ltda."
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_payments:"
+msgid "PAGOS"
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_payments:"
+msgid "Pago"
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_payments:"
+msgid "RESUMEN DE"
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_payments:"
+msgid "Total"
+msgstr "Total"
+
+msgctxt "report:nodux_sale_one.report_payments:"
+msgid "[ PAG."
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_payments:"
+msgid "]"
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_sales:"
+msgid "-"
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_sales:"
+msgid "/"
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_sales:"
+msgid "Cliente"
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_sales:"
+msgid "Crédito"
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_sales:"
+msgid "Efectivo"
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_sales:"
+msgid "FECHA DE IMPRESIÓN:"
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_sales:"
+msgid "Fecha"
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_sales:"
+msgid "IVA"
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_sales:"
+msgid "Monto total"
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_sales:"
+msgid "Nodux Cía. Ltda."
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_sales:"
+msgid "RESUMEN"
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_sales:"
+msgid "RESUMEN DE VENTAS"
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_sales:"
+msgid "SUBTOTAL 0%"
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_sales:"
+msgid "SUBTOTAL 14%"
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_sales:"
+msgid "SUBTOTALES"
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_sales:"
+msgid "Subtotal"
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_sales:"
+msgid "Tipo"
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_sales:"
+msgid "VENTAS CREDITO"
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_sales:"
+msgid "VENTAS EFECTIVO"
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_sales:"
+msgid "[ PAG."
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_sales:"
+msgid "]"
+msgstr ""
+
+msgctxt "report:sale.sale_payment_report:"
+msgid ":"
+msgstr ""
+
+msgctxt "report:sale.sale_payment_report:"
+msgid "C.I./RUC"
+msgstr ""
+
+msgctxt "report:sale.sale_payment_report:"
+msgid "COMPROBANTE DE PAGO"
+msgstr ""
+
+msgctxt "report:sale.sale_payment_report:"
+msgid "Cliente:"
+msgstr ""
+
+msgctxt "report:sale.sale_payment_report:"
+msgid "Dirección"
+msgstr ""
+
+msgctxt "report:sale.sale_payment_report:"
+msgid "Factura"
+msgstr ""
+
+msgctxt "report:sale.sale_payment_report:"
+msgid "Fecha"
+msgstr ""
+
+msgctxt "report:sale.sale_payment_report:"
+msgid "Monto."
+msgstr ""
+
+msgctxt "report:sale.sale_payment_report:"
+msgid "Nodux - (07) 2 560215 - 0999323367 - hola@nodux.e"
+msgstr ""
+
+msgctxt "report:sale.sale_payment_report:"
+msgid "Nodux Cía. Ltda.: (07) 2 560215 – 0999323367 – hola@nodux.ec"
+msgstr ""
+
+msgctxt "report:sale.sale_payment_report:"
+msgid "PAGADO:"
+msgstr ""
+
+msgctxt "report:sale.sale_payment_report:"
+msgid "PENDIENTE:"
+msgstr ""
+
+msgctxt "report:sale.sale_payment_report:"
+msgid "Sistema"
+msgstr ""
+
+msgctxt "report:sale.sale_payment_report:"
+msgid "Teléfono"
+msgstr ""
+
+msgctxt "report:sale.sale_payment_report:"
+msgid "Venta"
+msgstr ""
+
+msgctxt "report:sale.sale_payment_report:"
+msgid "c"
+msgstr "c"
+
+msgctxt "report:sale.sale_payment_report:"
+msgid "de Pago"
+msgstr ""
+
+msgctxt "report:sale.sale_pos:"
+msgid "$"
+msgstr ""
+
+msgctxt "report:sale.sale_pos:"
+msgid "%:"
+msgstr ""
+
+msgctxt "report:sale.sale_pos:"
+msgid ","
+msgstr ""
+
+msgctxt "report:sale.sale_pos:"
+msgid "-"
+msgstr ""
+
+msgctxt "report:sale.sale_pos:"
+msgid "-----"
+msgstr ""
+
+msgctxt "report:sale.sale_pos:"
+msgid "--------------------------------"
+msgstr ""
+
+msgctxt "report:sale.sale_pos:"
+msgid "----------------------------------------"
+msgstr ""
+
+msgctxt "report:sale.sale_pos:"
+msgid "/100"
+msgstr ""
+
+msgctxt "report:sale.sale_pos:"
+msgid "0"
+msgstr ""
+
+msgctxt "report:sale.sale_pos:"
+msgid "0 %"
+msgstr ""
+
+msgctxt "report:sale.sale_pos:"
+msgid "14"
+msgstr ""
+
+msgctxt "report:sale.sale_pos:"
+msgid "14%"
+msgstr ""
+
+msgctxt "report:sale.sale_pos:"
+msgid "2 560215 - 0999323367"
+msgstr ""
+
+msgctxt "report:sale.sale_pos:"
+msgid "4"
+msgstr ""
+
+msgctxt "report:sale.sale_pos:"
+msgid "4%"
+msgstr ""
+
+msgctxt "report:sale.sale_pos:"
+msgid ":"
+msgstr ""
+
+msgctxt "report:sale.sale_pos:"
+msgid "C.I./"
+msgstr ""
+
+msgctxt "report:sale.sale_pos:"
+msgid "C.I./RUC"
+msgstr ""
+
+msgctxt "report:sale.sale_pos:"
+msgid "COTIZACIÓN"
+msgstr ""
+
+msgctxt "report:sale.sale_pos:"
+msgid "Cant"
+msgstr ""
+
+msgctxt "report:sale.sale_pos:"
+msgid "Cant."
+msgstr ""
+
+msgctxt "report:sale.sale_pos:"
+msgid "Cliente"
+msgstr ""
+
+msgctxt "report:sale.sale_pos:"
+msgid "Cliente:"
+msgstr ""
+
+msgctxt "report:sale.sale_pos:"
+msgid "Código"
+msgstr ""
+
+msgctxt "report:sale.sale_pos:"
+msgid "DOLARES"
+msgstr ""
+
+msgctxt "report:sale.sale_pos:"
+msgid "Descripci"
+msgstr ""
+
+msgctxt "report:sale.sale_pos:"
+msgid "Descripción"
+msgstr ""
+
+msgctxt "report:sale.sale_pos:"
+msgid "Direcci"
+msgstr ""
+
+msgctxt "report:sale.sale_pos:"
+msgid "Dirección:"
+msgstr ""
+
+msgctxt "report:sale.sale_pos:"
+msgid "Fecha:"
+msgstr ""
+
+msgctxt "report:sale.sale_pos:"
+msgid "Firma Autorizada"
+msgstr ""
+
+msgctxt "report:sale.sale_pos:"
+msgid "IVA 1"
+msgstr ""
+
+msgctxt "report:sale.sale_pos:"
+msgid "Nodux Cía. Ltda.: (07) 2 560215 – 0999323367 – hola@nodux.ec"
+msgstr ""
+
+msgctxt "report:sale.sale_pos:"
+msgid "P. Unit."
+msgstr ""
+
+msgctxt "report:sale.sale_pos:"
+msgid "PVP"
+msgstr ""
+
+msgctxt "report:sale.sale_pos:"
+msgid "RUC:"
+msgstr ""
+
+msgctxt "report:sale.sale_pos:"
+msgid "SON:"
+msgstr ""
+
+msgctxt "report:sale.sale_pos:"
+msgid "Sistema Nodux"
+msgstr ""
+
+msgctxt "report:sale.sale_pos:"
+msgid "Su"
+msgstr ""
+
+msgctxt "report:sale.sale_pos:"
+msgid "Subt"
+msgstr ""
+
+msgctxt "report:sale.sale_pos:"
+msgid "Subt."
+msgstr ""
+
+msgctxt "report:sale.sale_pos:"
+msgid "Subtotal"
+msgstr ""
+
+msgctxt "report:sale.sale_pos:"
+msgid "Subtotal:"
+msgstr ""
+
+msgctxt "report:sale.sale_pos:"
+msgid "TOTAL"
+msgstr ""
+
+msgctxt "report:sale.sale_pos:"
+msgid "TOTAL:"
+msgstr ""
+
+msgctxt "report:sale.sale_pos:"
+msgid "Telefono"
+msgstr ""
+
+msgctxt "report:sale.sale_pos:"
+msgid "Teléfono"
+msgstr ""
+
+msgctxt "report:sale.sale_pos:"
+msgid "_______________"
+msgstr ""
+
+msgctxt "report:sale.sale_pos:"
+msgid "________________"
+msgstr ""
+
+msgctxt "report:sale.sale_pos:"
+msgid "b."
+msgstr ""
+
+msgctxt "report:sale.sale_pos:"
+msgid "n:"
+msgstr ""
+
+msgctxt "report:sale.sale_pos:"
+msgid "o"
+msgstr ""
+
+msgctxt "report:sale.sale_pos:"
+msgid "on"
+msgstr ""
 
 msgctxt "selection:sale.line,type:"
 msgid "Line"
@@ -448,6 +898,10 @@ msgstr "Cotización"
 msgctxt "view:company.company:"
 msgid "Sequence Sale"
 msgstr "Secuencia de Venta"
+
+msgctxt "view:nodux_sale_one.print_report_payment.start:"
+msgid "Print Salesman Report "
+msgstr "Imprimir Reporte de Pagos"
 
 msgctxt "view:nodux_sale_one.print_report_sale.start:"
 msgid "Print Salesman Report "
@@ -536,6 +990,14 @@ msgstr "Base imponible"
 msgctxt "view:sale.sale:"
 msgid "_Pay"
 msgstr "Pagar"
+
+msgctxt "wizard_button:nodux_sale_one.print_report_payment,start,end:"
+msgid "Cancel"
+msgstr "Cancelar"
+
+msgctxt "wizard_button:nodux_sale_one.print_report_payment,start,print_:"
+msgid "Print"
+msgstr "Imprimir"
 
 msgctxt "wizard_button:nodux_sale_one.print_report_sale,start,end:"
 msgid "Cancel"
