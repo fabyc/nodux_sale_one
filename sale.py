@@ -271,6 +271,15 @@ class Sale(Workflow, ModelSQL, ModelView):
         if self.currency:
             self.tax_amount = self.currency.round(self.tax_amount)
 
+    @fields.depends('days', 'party')
+    def on_change_days(self, name=None):
+        if self.party:
+            if self.party.type_document == '07':
+                self.days = 0
+            elif self.party.vat_number == '9999999999999':
+                self.days = 0
+            elif self.party.name.lower() == 'consumidor final':
+                self.days = 0
 
     def get_tax_amount(self):
         tax = _ZERO
