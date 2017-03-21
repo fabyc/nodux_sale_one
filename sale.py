@@ -1083,12 +1083,17 @@ class ReportSales(Report):
         subtotal12 = Decimal(0.0)
         total_recibido = Decimal(0.0)
         total_por_cobrar = Decimal(0.0)
+        ventas_credito = Decimal(0.0)
+
         company = Company(data['company'])
         sales = Sale.search([('sale_date', '>=', fecha), ('sale_date', '<=', fecha_fin), ('state','in', ['done','confirmed'])])
 
         if sales:
             for s in sales:
                 if s.total_amount > Decimal(0.0):
+                    if s.days > 0:
+                        ventas_credito = s.total_amount
+
                     total_ventas += s.total_amount
                     total_iva += s.tax_amount
                     subtotal_total += s.untaxed_amount
@@ -1129,6 +1134,7 @@ class ReportSales(Report):
         report_context['subtotal_total'] = subtotal_total
         report_context['subtotal14'] = subtotal14
         report_context['subtotal0'] = subtotal0
+        report_context['total_ventas_creditos'] = ventas_credito
         return report_context
 
 class SalePaymentReport(Report):
