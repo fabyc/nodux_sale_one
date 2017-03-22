@@ -28,7 +28,7 @@ import time
 __all__ = ['Sale', 'SaleLine','SalePaymentForm', 'WizardSalePayment',
 'SaleReportPos', 'PrintReportSalesStart', 'PrintReportSales', 'ReportSales',
 'StatementLine', 'SalePaymentReport', 'PrintReportPaymentsStart',
-'PrintReportPayments', 'ReportPayments']
+'PrintReportPayments', 'ReportPayments', 'SequenceSale']
 
 _ZERO = Decimal(0)
 
@@ -403,6 +403,15 @@ class StatementLine(ModelSQL, ModelView):
     sale = fields.Many2One('sale.sale', 'Sale', ondelete='RESTRICT')
     date = fields.Date('Date', readonly=True)
     amount = fields.Numeric('Amount', readonly = True)
+
+class SequenceSale(ModelSQL, ModelView):
+    'Point of Sale'
+    __name__ = 'sale.sequence'
+
+    name = fields.Char('Name')
+    sequence_sale = fields.Integer('Sequence Sale')
+    emision = fields.Char('Emission Point')
+
 
 class SaleLine(ModelSQL, ModelView):
     'Sale Line'
@@ -870,13 +879,18 @@ class WizardSalePayment(Wizard):
 
         Company = pool.get('company.company')
         company = Company(Transaction().context.get('company'))
+        user_transaction = User(Transaction().user)
 
         if not sale.reference:
-            reference = company.sequence_sale
+            if user_transaction.tpv:
+                tpv = user_transaction.tpv
+            else:
+                self.raise_user_error('El usuario no tiene configurado punto de Emision')
+            reference = tpv.sequence_sale
             sucursal = company.sucursal
-            emision = company.emision
-            company.sequence_sale = company.sequence_sale + 1
-            company.save()
+            emision = tpv.emision
+            tpv.sequence_sale = tpv.sequence_sale + 1
+            tpv.save()
 
             if len(str(reference)) == 1:
                 reference_end = '00000000' + str(reference)

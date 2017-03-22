@@ -8,4 +8,11 @@
             <field name="unlimited"/>
         </page>
     </xpath>
+
+    <xpath expr="/form/notebook/page[@id='preferences']" position="after">
+        <page string="Sale Sequence" id="sales_sequences">
+            <label name="tpv"/>
+            <field name="tpv"/>
+        </page>
+    </xpath>
 </data>

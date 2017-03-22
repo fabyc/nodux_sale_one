@@ -6,17 +6,9 @@ msgctxt "field:company.company,default_party:"
 msgid "Default Client"
 msgstr "Cliente por Defecto"
 
-msgctxt "field:company.company,emision:"
-msgid "Emission Point"
-msgstr "Punto de Emisión"
-
 msgctxt "field:company.company,logo:"
 msgid "Logo de su empresa"
 msgstr ""
-
-msgctxt "field:company.company,sequence_sale:"
-msgid "Sequence Sale"
-msgstr "Secuencia de Venta"
 
 msgctxt "field:company.company,sucursal:"
 msgid "Sucursal"
@@ -57,6 +49,10 @@ msgstr "ID"
 msgctxt "field:res.user,limit:"
 msgid "Sales Limit"
 msgstr "Límite de Ventas"
+
+msgctxt "field:res.user,tpv:"
+msgid "TPV"
+msgstr ""
 
 msgctxt "field:res.user,unlimited:"
 msgid "Unlimited Sales"
@@ -334,6 +330,42 @@ msgctxt "field:sale.sale,write_uid:"
 msgid "Write User"
 msgstr "Modificado por Usuario"
 
+msgctxt "field:sale.sequence,create_date:"
+msgid "Create Date"
+msgstr "Fecha de Creación"
+
+msgctxt "field:sale.sequence,create_uid:"
+msgid "Create User"
+msgstr "Usuario creación"
+
+msgctxt "field:sale.sequence,emision:"
+msgid "Emission Point"
+msgstr "Punto de Emision"
+
+msgctxt "field:sale.sequence,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:sale.sequence,name:"
+msgid "Name"
+msgstr "Nombre"
+
+msgctxt "field:sale.sequence,rec_name:"
+msgid "Name"
+msgstr "Nombre"
+
+msgctxt "field:sale.sequence,sequence_sale:"
+msgid "Sequence Sale"
+msgstr "Secuencia de Venta"
+
+msgctxt "field:sale.sequence,write_date:"
+msgid "Write Date"
+msgstr "Fecha de Modificación"
+
+msgctxt "field:sale.sequence,write_uid:"
+msgid "Write User"
+msgstr "Modificado por Usuario"
+
 msgctxt "model:ir.action,name:act_party_receivable_form"
 msgid "Por Cobrar"
 msgstr ""
@@ -349,6 +381,10 @@ msgstr "Venta TPV"
 msgctxt "model:ir.action,name:act_sale_relate_form"
 msgid "Venta"
 msgstr ""
+
+msgctxt "model:ir.action,name:act_sequence_form"
+msgid "Sequence Sale"
+msgstr "Secuencia de Venta"
 
 msgctxt "model:ir.action,name:report_payments"
 msgid "Reporte de Pagos"
@@ -377,7 +413,7 @@ msgstr "Pagar"
 #, fuzzy
 msgctxt "model:ir.action,name:wizard_sales_report"
 msgid "Reporte de Ventas por fecha"
-msgstr ""
+msgstr "Reporte de Inventario"
 
 msgctxt "model:ir.action.act_window.domain,name:act_sale_form_domain_all"
 msgid "All"
@@ -418,6 +454,10 @@ msgctxt "model:ir.ui.menu,name:menu_sale"
 msgid "Sales"
 msgstr "Ventas"
 
+msgctxt "model:ir.ui.menu,name:menu_sale_configuration"
+msgid "Configuration Sale"
+msgstr "Configuración de Venta"
+
 msgctxt "model:ir.ui.menu,name:menu_sale_pos"
 msgid "POS Sales"
 msgstr "Venta TPV"
@@ -426,6 +466,10 @@ msgstr "Venta TPV"
 msgctxt "model:ir.ui.menu,name:menu_sale_report"
 msgid "Reporte de Ventas por fecha"
 msgstr "Reporte de Inventario"
+
+msgctxt "model:ir.ui.menu,name:menu_sale_sequence"
+msgid "Sequence Sale"
+msgstr "Punto de Venta"
 
 msgctxt "model:nodux_sale_one.print_report_payment.start,name:"
 msgid "Print Report Payment Start"
@@ -454,6 +498,10 @@ msgstr "Pagos"
 msgctxt "model:sale.sale,name:"
 msgid "Sale"
 msgstr "Venta"
+
+msgctxt "model:sale.sequence,name:"
+msgid "Point of Sale"
+msgstr "Punto de Venta"
 
 msgctxt "report:nodux_sale_one.report_payments:"
 msgid "-"
@@ -915,6 +963,10 @@ msgctxt "view:res.user:"
 msgid "Sale Limit"
 msgstr "Límite de Ventas"
 
+msgctxt "view:res.user:"
+msgid "Sale Sequence"
+msgstr "Punto de Venta"
+
 msgctxt "view:sale.line:"
 msgid "General"
 msgstr "General"
@@ -990,6 +1042,10 @@ msgstr "Base imponible"
 msgctxt "view:sale.sale:"
 msgid "_Pay"
 msgstr "Pagar"
+
+msgctxt "view:sale.sequence:"
+msgid "Point of Sale"
+msgstr "Punto de Venta"
 
 msgctxt "wizard_button:nodux_sale_one.print_report_payment,start,end:"
 msgid "Cancel"

@@ -14,9 +14,7 @@ class Company():
     'Company'
     __name__ = 'company.company'
 
-    sequence_sale = fields.Integer('Sequence Sale')
     sucursal = fields.Char('Sucursal')
-    emision = fields.Char('Emission Point')
     default_party = fields.Many2One('party.party', 'Default Client')
 
     @classmethod
@@ -24,13 +22,5 @@ class Company():
         super(Company, cls).__setup__()
 
     @staticmethod
-    def default_sequence_sale():
-        return 1
-
-    @staticmethod
     def default_sucursal():
-        return '001'
-
-    @staticmethod
-    def default_emision():
         return '001'
