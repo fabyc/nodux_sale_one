@@ -2,12 +2,8 @@
 <data>
     <xpath expr="/form/notebook/page[@id='reports']" position="after">
         <page string="Sequence Sale" id="sequence_sale" col="6">
-            <label name="sequence_sale"/>
-            <field name="sequence_sale"/>
             <label name="sucursal"/>
             <field name="sucursal"/>
-            <label name="emision"/>
-            <field name="emision"/>
             <newline/>
             <label name="default_party"/>
             <field name="default_party"/>
