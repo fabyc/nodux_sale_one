@@ -408,10 +408,9 @@ class SequenceSale(ModelSQL, ModelView):
     'Point of Sale'
     __name__ = 'sale.sequence'
 
-    name = fields.Char('Name')
-    sequence_sale = fields.Integer('Sequence Sale')
-    emision = fields.Char('Emission Point')
-
+    name = fields.Char('Name', required=True)
+    sequence_sale = fields.Integer('Sequence Sale', required=True)
+    emision = fields.Char('Emission Point', required=True)
 
 class SaleLine(ModelSQL, ModelView):
     'Sale Line'
