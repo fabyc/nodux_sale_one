@@ -282,6 +282,36 @@ The COPYRIGHT file at the top level of this repository contains the full copyrig
             <field name="action" ref="act_sale_relate_form"/>
         </record>
 
+        <!--PERMISOS -->
+        <record model="res.group" id="group_sale">
+              <field name="name">Nodux - Ventas</field>
+        </record>
+        <record model="res.user-res.group" id="user_admin_group_sale">
+            <field name="user" ref="res.user_admin"/>
+            <field name="group" ref="group_sale"/>
+        </record>
+
+        <record model="res.user-res.group" id="user_trigger_group_sale">
+            <field name="user" ref="res.user_trigger"/>
+            <field name="group" ref="group_sale"/>
+        </record>
+
+        <record model="ir.ui.menu-res.group" id="menu_sale_group_sale_configuration">
+            <field name="menu" ref="menu_sale_configuration"/>
+            <field name="group" ref="group_sale"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_sale_group_sale_report">
+            <field name="menu" ref="menu_sale_report"/>
+            <field name="group" ref="group_sale"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_sale_group_sale_receivable">
+            <field name="menu" ref="menu_receivable_form"/>
+            <field name="group" ref="group_sale"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_sale_group_sale_payment">
+            <field name="menu" ref="menu_payment_report"/>
+            <field name="group" ref="group_sale"/>
+        </record>
 
     </data>
 </tryton>
