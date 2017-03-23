@@ -114,6 +114,7 @@ class Sale(Workflow, ModelSQL, ModelView):
             })
     state_date = fields.Function(fields.Char('State dy Date', readonly=True), 'get_state_date')
     payments = fields.One2Many('sale.payments', 'sale', 'Payments', readonly=True)
+    price_list = fields.Many2One('product.price_list', 'PriceList')
 
     @classmethod
     def __register__(cls, module_name):
@@ -498,6 +499,10 @@ class SaleLine(ModelSQL, ModelView):
             if field.states.get('readonly'):
                 del field.states['readonly']
 
+        cls.quantity.on_change.add('_parent_sale.price_list')
+        cls.unit.on_change.add('_parent_sale.price_list')
+        cls.product.on_change.add('_parent_sale.price_list')
+
     @staticmethod
     def default_type():
         return 'line'
@@ -551,6 +556,8 @@ class SaleLine(ModelSQL, ModelView):
                 context['customer'] = self.sale.party.id
             if getattr(self.sale, 'sale_date', None):
                 context['sale_date'] = self.sale.sale_date
+        if self.sale and getattr(self.sale, 'price_list', None):
+            context['price_list'] = self.sale.price_list.id
         if self.unit:
             context['uom'] = self.unit.id
         else:

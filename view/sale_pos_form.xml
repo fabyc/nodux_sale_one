@@ -15,6 +15,8 @@ The COPYRIGHT file at the top level of this repository contains the full copyrig
             <field name="sale_date"/>
             <label name="days"/>
             <field name="days"/>
+            <label name="price_list"/>
+            <field name="price_list"/>
             <separator colspan="2" id="amount_info"/>
             <label name="untaxed_amount"/>
             <field name="untaxed_amount"/>
