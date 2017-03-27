@@ -593,7 +593,7 @@ class SaleLine(ModelSQL, ModelView):
     def on_change_product(self):
         Product = Pool().get('product.product')
         if not self.product:
-            pass
+            return
         party = None
         party_context = {}
         if self.sale and self.sale.party:
