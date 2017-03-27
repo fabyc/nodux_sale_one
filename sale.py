@@ -660,7 +660,7 @@ class SaleLine(ModelSQL, ModelView):
         value = Decimal(0.0)
 
         def compute_amount_with_tax(line):
-
+            tax_amount = Decimal(0.0)
             if line.product.taxes_category == True:
                 impuesto = line.product.category.taxes
             else:
