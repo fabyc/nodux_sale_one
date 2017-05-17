@@ -4,5 +4,6 @@ The COPYRIGHT file at the top level of this repository contains the full copyrig
 <tree string="Point of Sale">
   <field name="name"/>
   <field name="sequence_sale"/>
+  <field name="sequence_sale_note"/>
   <field name="emision"/>
 </tree>

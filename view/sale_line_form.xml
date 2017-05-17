@@ -24,6 +24,20 @@ this repository contains the full copyright notices and license terms. -->
             <field name="unit_price"/>
             <label name="amount"/>
             <field name="amount"/>
+            <newline/>
+            <label name="desglose"/>
+            <field name="desglose"/>
+            <newline/>
+            <group id="discount" colspan="2" col="2" xexpand="0">
+                <label name="discount" xalign="0" xexpand="0"/>
+                <group id="discount_percent" colspan="1" col="2" xexpand="0">
+                    <field name="discount" factor="100" xalign="0.0" xexpand="0"/>
+                    <label name="discount" string="%" xalign="0.0" xexpand="1" xfill="1"/>
+                </group>
+            </group>
+            <newline/>
+            <label name="discount_desglose"/>
+            <field name="discount_desglose"/>
         </page>
     </notebook>
     <field name="unit_digits" invisible="1" colspan="4"/>

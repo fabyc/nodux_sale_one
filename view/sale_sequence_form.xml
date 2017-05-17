@@ -6,6 +6,8 @@ this repository contains the full copyright notices and license terms. -->
     <field name="name" colspan="3"/>
     <label name="sequence_sale"/>
     <field name="sequence_sale"/>
+    <label name="sequence_sale_note"/>
+    <field name="sequence_sale_note"/>
     <label name="emision"/>
     <field name="emision"/>
 </form>

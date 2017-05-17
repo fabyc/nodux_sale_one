@@ -86,6 +86,18 @@ msgctxt "field:sale.line,description:"
 msgid "Description"
 msgstr "Descripción"
 
+msgctxt "field:sale.line,desglose:"
+msgid "Aplicar descuento con desglose"
+msgstr ""
+
+msgctxt "field:sale.line,discount:"
+msgid "Percent Discount"
+msgstr "Porcentaje de Descuento"
+
+msgctxt "field:sale.line,discount_desglose:"
+msgid "Discount"
+msgstr "Descuento"
+
 msgctxt "field:sale.line,id:"
 msgid "ID"
 msgstr "ID"
@@ -274,6 +286,10 @@ msgctxt "field:sale.sale,payments:"
 msgid "Payments"
 msgstr "Pagos"
 
+msgctxt "field:sale.sale,price_list:"
+msgid "PriceList"
+msgstr "Lista de Precio"
+
 msgctxt "field:sale.sale,rec_name:"
 msgid "Name"
 msgstr "Nombre"
@@ -289,6 +305,10 @@ msgstr "Pendiente"
 msgctxt "field:sale.sale,sale_date:"
 msgid "Sale Date"
 msgstr "Fecha de Venta"
+
+msgctxt "field:sale.sale,sale_note:"
+msgid "Sale Note"
+msgstr "Nota de Venta"
 
 msgctxt "field:sale.sale,state:"
 msgid "State"
@@ -358,6 +378,10 @@ msgctxt "field:sale.sequence,sequence_sale:"
 msgid "Sequence Sale"
 msgstr "Secuencia de Venta"
 
+msgctxt "field:sale.sequence,sequence_sale_note:"
+msgid "Sequence Sale Note"
+msgstr "Secuencia de Nota de Venta"
+
 msgctxt "field:sale.sequence,write_date:"
 msgid "Write Date"
 msgstr "Fecha de Modificación"
@@ -383,8 +407,8 @@ msgid "Venta"
 msgstr ""
 
 msgctxt "model:ir.action,name:act_sequence_form"
-msgid "Sequence Sale"
-msgstr "Secuencia de Venta"
+msgid "Point of Sale"
+msgstr "Punto de Venta"
 
 msgctxt "model:ir.action,name:report_payments"
 msgid "Reporte de Pagos"
@@ -410,10 +434,9 @@ msgctxt "model:ir.action,name:wizard_sale_payment"
 msgid "Pay"
 msgstr "Pagar"
 
-#, fuzzy
 msgctxt "model:ir.action,name:wizard_sales_report"
 msgid "Reporte de Ventas por fecha"
-msgstr "Reporte de Inventario"
+msgstr "Reporte de Ventas por Fecha"
 
 msgctxt "model:ir.action.act_window.domain,name:act_sale_form_domain_all"
 msgid "All"
@@ -462,13 +485,12 @@ msgctxt "model:ir.ui.menu,name:menu_sale_pos"
 msgid "POS Sales"
 msgstr "Venta TPV"
 
-#, fuzzy
 msgctxt "model:ir.ui.menu,name:menu_sale_report"
 msgid "Reporte de Ventas por fecha"
-msgstr "Reporte de Inventario"
+msgstr "Reporte de Ventas por fecha"
 
 msgctxt "model:ir.ui.menu,name:menu_sale_sequence"
-msgid "Sequence Sale"
+msgid "Point of Sale"
 msgstr "Punto de Venta"
 
 msgctxt "model:nodux_sale_one.print_report_payment.start,name:"
@@ -478,6 +500,14 @@ msgstr "Imprimir Reporte de Pago"
 msgctxt "model:nodux_sale_one.print_report_sale.start,name:"
 msgid "Print Report Sales Start"
 msgstr "Imprimit Reporte de Ventas"
+
+msgctxt "model:res.group,name:group_change_tpv"
+msgid "Nodux - Cambiar TPV"
+msgstr ""
+
+msgctxt "model:res.group,name:group_sale"
+msgid "Nodux - Ventas"
+msgstr ""
 
 msgctxt "model:res.group,name:group_stock_force"
 msgid "Nodux - Stock Force"
@@ -532,6 +562,10 @@ msgid "Nodux Cía. Ltda."
 msgstr ""
 
 msgctxt "report:nodux_sale_one.report_payments:"
+msgid "Nota Venta"
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_payments:"
 msgid "PAGOS"
 msgstr ""
 
@@ -553,6 +587,10 @@ msgstr ""
 
 msgctxt "report:nodux_sale_one.report_payments:"
 msgid "]"
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_payments:"
+msgid "✔"
 msgstr ""
 
 msgctxt "report:nodux_sale_one.report_sales:"
@@ -596,6 +634,10 @@ msgid "Nodux Cía. Ltda."
 msgstr ""
 
 msgctxt "report:nodux_sale_one.report_sales:"
+msgid "Nota de Venta"
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_sales:"
 msgid "RESUMEN"
 msgstr ""
 
@@ -612,11 +654,27 @@ msgid "SUBTOTAL 14%"
 msgstr ""
 
 msgctxt "report:nodux_sale_one.report_sales:"
-msgid "SUBTOTALES"
+msgid "SUBTOTALES NOTAS DE VENTA"
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_sales:"
+msgid "SUBTOTALES VENTAS"
 msgstr ""
 
 msgctxt "report:nodux_sale_one.report_sales:"
 msgid "Subtotal"
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_sales:"
+msgid "TOTAL IVA"
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_sales:"
+msgid "TOTAL NOTAS DE VENTA"
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_sales:"
+msgid "TOTAL VENTAS"
 msgstr ""
 
 msgctxt "report:nodux_sale_one.report_sales:"
@@ -637,6 +695,10 @@ msgstr ""
 
 msgctxt "report:nodux_sale_one.report_sales:"
 msgid "]"
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_sales:"
+msgid "✔"
 msgstr ""
 
 msgctxt "report:sale.sale_payment_report:"
@@ -720,22 +782,6 @@ msgid ","
 msgstr ""
 
 msgctxt "report:sale.sale_pos:"
-msgid "-"
-msgstr ""
-
-msgctxt "report:sale.sale_pos:"
-msgid "-----"
-msgstr ""
-
-msgctxt "report:sale.sale_pos:"
-msgid "--------------------------------"
-msgstr ""
-
-msgctxt "report:sale.sale_pos:"
-msgid "----------------------------------------"
-msgstr ""
-
-msgctxt "report:sale.sale_pos:"
 msgid "/100"
 msgstr ""
 
@@ -744,27 +790,11 @@ msgid "0"
 msgstr ""
 
 msgctxt "report:sale.sale_pos:"
-msgid "0 %"
-msgstr ""
-
-msgctxt "report:sale.sale_pos:"
 msgid "14"
 msgstr ""
 
 msgctxt "report:sale.sale_pos:"
-msgid "14%"
-msgstr ""
-
-msgctxt "report:sale.sale_pos:"
-msgid "2 560215 - 0999323367"
-msgstr ""
-
-msgctxt "report:sale.sale_pos:"
 msgid "4"
-msgstr ""
-
-msgctxt "report:sale.sale_pos:"
-msgid "4%"
 msgstr ""
 
 msgctxt "report:sale.sale_pos:"
@@ -777,6 +807,10 @@ msgstr ""
 
 msgctxt "report:sale.sale_pos:"
 msgid "C.I./RUC"
+msgstr ""
+
+msgctxt "report:sale.sale_pos:"
+msgid "C.I./RUC:"
 msgstr ""
 
 msgctxt "report:sale.sale_pos:"
@@ -808,15 +842,7 @@ msgid "DOLARES"
 msgstr ""
 
 msgctxt "report:sale.sale_pos:"
-msgid "Descripci"
-msgstr ""
-
-msgctxt "report:sale.sale_pos:"
 msgid "Descripción"
-msgstr ""
-
-msgctxt "report:sale.sale_pos:"
-msgid "Direcci"
 msgstr ""
 
 msgctxt "report:sale.sale_pos:"
@@ -836,7 +862,19 @@ msgid "IVA 1"
 msgstr ""
 
 msgctxt "report:sale.sale_pos:"
+msgid "NOTA DE VENTA"
+msgstr ""
+
+msgctxt "report:sale.sale_pos:"
+msgid "Nodux - (07) 2 560215 - 0999323367 - hola@nodux.e"
+msgstr ""
+
+msgctxt "report:sale.sale_pos:"
 msgid "Nodux Cía. Ltda.: (07) 2 560215 – 0999323367 – hola@nodux.ec"
+msgstr ""
+
+msgctxt "report:sale.sale_pos:"
+msgid "Nº"
 msgstr ""
 
 msgctxt "report:sale.sale_pos:"
@@ -844,7 +882,7 @@ msgid "P. Unit."
 msgstr ""
 
 msgctxt "report:sale.sale_pos:"
-msgid "PVP"
+msgid "Precio"
 msgstr ""
 
 msgctxt "report:sale.sale_pos:"
@@ -856,11 +894,7 @@ msgid "SON:"
 msgstr ""
 
 msgctxt "report:sale.sale_pos:"
-msgid "Sistema Nodux"
-msgstr ""
-
-msgctxt "report:sale.sale_pos:"
-msgid "Su"
+msgid "Sistema"
 msgstr ""
 
 msgctxt "report:sale.sale_pos:"
@@ -880,19 +914,19 @@ msgid "Subtotal:"
 msgstr ""
 
 msgctxt "report:sale.sale_pos:"
-msgid "TOTAL"
-msgstr ""
-
-msgctxt "report:sale.sale_pos:"
 msgid "TOTAL:"
 msgstr ""
 
 msgctxt "report:sale.sale_pos:"
-msgid "Telefono"
+msgid "Teléfono"
 msgstr ""
 
 msgctxt "report:sale.sale_pos:"
-msgid "Teléfono"
+msgid "Unit"
+msgstr "Unidad"
+
+msgctxt "report:sale.sale_pos:"
+msgid "Unit."
 msgstr ""
 
 msgctxt "report:sale.sale_pos:"
@@ -903,21 +937,10 @@ msgctxt "report:sale.sale_pos:"
 msgid "________________"
 msgstr ""
 
+#, fuzzy
 msgctxt "report:sale.sale_pos:"
-msgid "b."
-msgstr ""
-
-msgctxt "report:sale.sale_pos:"
-msgid "n:"
-msgstr ""
-
-msgctxt "report:sale.sale_pos:"
-msgid "o"
-msgstr ""
-
-msgctxt "report:sale.sale_pos:"
-msgid "on"
-msgstr ""
+msgid "c"
+msgstr "c"
 
 msgctxt "selection:sale.line,type:"
 msgid "Line"
@@ -944,8 +967,8 @@ msgid "Quotation"
 msgstr "Cotización"
 
 msgctxt "view:company.company:"
-msgid "Sequence Sale"
-msgstr "Secuencia de Venta"
+msgid "Configuration Sale"
+msgstr "Configuración de Venta"
 
 msgctxt "view:nodux_sale_one.print_report_payment.start:"
 msgid "Print Salesman Report "
@@ -966,6 +989,10 @@ msgstr "Límite de Ventas"
 msgctxt "view:res.user:"
 msgid "Sale Sequence"
 msgstr "Punto de Venta"
+
+msgctxt "view:sale.line:"
+msgid "%"
+msgstr ""
 
 msgctxt "view:sale.line:"
 msgid "General"

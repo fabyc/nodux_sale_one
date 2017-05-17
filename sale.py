@@ -115,6 +115,9 @@ class Sale(Workflow, ModelSQL, ModelView):
     state_date = fields.Function(fields.Char('State dy Date', readonly=True), 'get_state_date')
     payments = fields.One2Many('sale.payments', 'sale', 'Payments', readonly=True)
     price_list = fields.Many2One('product.price_list', 'PriceList')
+    sale_note = fields.Boolean('Sale Note', states={
+        'readonly': (Eval('state') != 'draft'),
+    })
 
     @classmethod
     def __register__(cls, module_name):
@@ -185,6 +188,7 @@ class Sale(Workflow, ModelSQL, ModelView):
         default['paid_amount'] = Decimal(0.0)
         default['residual_amount'] = None
         default['sale_date'] = date
+        default['payments'] = None
         return super(Sale, cls).copy(sales, default=default)
 
     @classmethod
@@ -411,6 +415,7 @@ class SequenceSale(ModelSQL, ModelView):
 
     name = fields.Char('Name', required=True)
     sequence_sale = fields.Integer('Sequence Sale', required=True)
+    sequence_sale_note = fields.Integer('Sequence Sale Note', required=True)
     emision = fields.Char('Emission Point', required=True)
 
 class SaleLine(ModelSQL, ModelView):
@@ -489,6 +494,15 @@ class SaleLine(ModelSQL, ModelView):
             },
         depends=['sale'])
 
+    discount = fields.Numeric('Percent Discount', states={
+        'invisible': Eval('desglose', True),
+    })
+    desglose = fields.Boolean('Aplicar descuento con desglose')
+    discount_desglose = fields.Numeric('Discount', states={
+        'invisible': ~Eval('desglose', True),
+    })
+
+
     @classmethod
     def __setup__(cls):
         super(SaleLine, cls).__setup__()
@@ -498,6 +512,20 @@ class SaleLine(ModelSQL, ModelView):
             field = getattr(cls, fname)
             if field.states.get('readonly'):
                 del field.states['readonly']
+
+        if 'discount_desglose' not in cls.unit_price_w_tax.on_change_with:
+            cls.unit_price_w_tax.on_change_with.add('discount_desglose')
+        if 'discount_desglose' not in cls.amount_w_tax.on_change_with:
+            cls.amount_w_tax.on_change_with.add('discount_desglose')
+        if 'discount_desglose' not in cls.amount.on_change_with:
+            cls.amount.on_change_with.add('discount_desglose')
+
+        if 'discount' not in cls.unit_price_w_tax.on_change_with:
+            cls.unit_price_w_tax.on_change_with.add('discount')
+        if 'discount' not in cls.amount_w_tax.on_change_with:
+            cls.amount_w_tax.on_change_with.add('discount')
+        if 'discount' not in cls.amount.on_change_with:
+            cls.amount.on_change_with.add('discount')
 
         cls.quantity.on_change.add('_parent_sale.price_list')
         cls.unit.on_change.add('_parent_sale.price_list')
@@ -619,21 +647,101 @@ class SaleLine(ModelSQL, ModelView):
         self.type = 'line'
         self.amount = self.on_change_with_amount()
         self.description =  self.product.name
+        self.discount = Decimal(0.0)
+        self.discount_desglose = Decimal(0.0)
 
+    @fields.depends('product', 'unit', 'quantity', 'description',
+        '_parent_sale.currency', 'unit_price', 'discount')
+    def on_change_discount(self):
+        Product = Pool().get('product.product')
+        if not self.product:
+            return
+
+        if self.discount > Decimal(0.0) and self.discount < Decimal(100.0) \
+            and self.unit_price:
+            self.unit_price = Product.get_sale_price([self.product],
+                self.quantity or 0)[self.product.id]
+            discount = self.discount
+            self.unit_price= self.unit_price - (self.unit_price  * discount)
+            self.unit_price.quantize(
+                    Decimal(1) / 10 ** self.__class__.unit_price.digits[1])
+            self.discount_desglose = Decimal(0.0)
+        else:
+            self.unit_price = Product.get_sale_price([self.product],
+                self.quantity or 0)[self.product.id]
+            if self.unit_price:
+                self.unit_price = self.unit_price.quantize(
+                    Decimal(1) / 10 ** self.__class__.unit_price.digits[1])
+            self.discount = Decimal(0.0)
+            self.discount_desglose = Decimal(0.0)
+
+    @fields.depends('product', 'unit', 'quantity', 'description',
+        '_parent_sale.currency', 'unit_price', 'discount', 'discount_desglose')
+    def on_change_discount_desglose(self):
+        Product = Pool().get('product.product')
+        if not self.product:
+            return
+
+        if self.discount_desglose > Decimal(0.0) and self.unit_price:
+
+            desglose = self.discount_desglose
+            rate = 0
+            if self.quantity:
+                if self.product.taxes_category == True:
+                    if self.product.category.taxes == "iva0":
+                        rate = 0
+                    elif self.product.category.taxes =="no_iva":
+                        rate = 0
+                    elif self.product.category.taxes == "iva12":
+                        rate = 0.12
+                    elif self.product.category.taxes == "iva14":
+                        rate = 0.14
+                else:
+                    if self.product.taxes == "iva0":
+                        rate = 0
+                    elif self.product.taxes =="no_iva":
+                        rate = 0
+                    elif self.product.taxes == "iva12":
+                        rate = 0.12
+                    elif self.product.taxes == "iva14":
+                        rate = 0.14
+
+                porcentaje = Decimal(1 + rate)
+                unit_price = (desglose / porcentaje)
+
+            self.unit_price = unit_price
+            self.unit_price.quantize(
+                    Decimal(1) / 10 ** self.__class__.unit_price.digits[1])
+            self.discount = Decimal(0.0)
+        else:
+            self.unit_price = Product.get_sale_price([self.product],
+                self.quantity or 0)[self.product.id]
+            if self.unit_price:
+                self.unit_price = self.unit_price.quantize(
+                    Decimal(1) / 10 ** self.__class__.unit_price.digits[1])
+            self.discount = Decimal(0.0)
+            self.discount_desglose = Decimal(0.0)
 
     @fields.depends('product', 'quantity', 'unit',
         '_parent_sale.currency', '_parent_sale.party',
-        '_parent_sale.sale_date', 'description')
+        '_parent_sale.sale_date', 'description', 'discount')
     def on_change_quantity(self):
         Product = Pool().get('product.product')
         if self.product:
-            with Transaction().set_context(
-                    self._get_context_sale_price()):
-                self.unit_price = Product.get_sale_price([self.product],
-                    self.quantity or 0)[self.product.id]
-                if self.unit_price:
-                    self.unit_price = self.unit_price.quantize(
-                        Decimal(1) / 10 ** self.__class__.unit_price.digits[1])
+            if self.discount:
+                if self.discount > Decimal(0.0) and self.discount < Decimal(0.0):
+                    self.unit_price = self.unit_price*self.quantity
+                    if self.unit_price:
+                        self.unit_price = self.unit_price.quantize(
+                            Decimal(1) / 10 ** self.__class__.unit_price.digits[1])
+            else:
+                with Transaction().set_context(
+                        self._get_context_sale_price()):
+                    self.unit_price = Product.get_sale_price([self.product],
+                        self.quantity or 0)[self.product.id]
+                    if self.unit_price:
+                        self.unit_price = self.unit_price.quantize(
+                            Decimal(1) / 10 ** self.__class__.unit_price.digits[1])
 
     @fields.depends(methods=['quantity'])
     def on_change_unit(self):
@@ -784,7 +892,7 @@ class WizardSalePayment(Wizard):
         limit = user.limit
         form = self.start
         sales = Sale.search_count([('state', '=', 'done')])
-        if sales > limit and user.unlimited != True:
+        if sales == limit and user.unlimited != True:
             self.raise_user_error(u'Ha excedido el límite de Ventas, contacte con el Administrador de NODUX')
         active_id = Transaction().context.get('active_id', False)
         sale = Sale(active_id)
@@ -882,40 +990,68 @@ class WizardSalePayment(Wizard):
                             template.total = Decimal(str(round(Decimal(total - Decimal(line.quantity * line.unit.factor)),8)))
                             template.save()
 
-
         Company = pool.get('company.company')
         company = Company(Transaction().context.get('company'))
         user_transaction = User(Transaction().user)
 
-        if not sale.reference:
-            if user_transaction.tpv:
-                tpv = user_transaction.tpv
-            else:
-                self.raise_user_error('El usuario no tiene configurado punto de Emision')
-            reference = tpv.sequence_sale
-            sucursal = company.sucursal
-            emision = tpv.emision
-            tpv.sequence_sale = tpv.sequence_sale + 1
-            tpv.save()
+        if sale.sale_note == True:
+            if not sale.reference:
+                if user_transaction.tpv:
+                    tpv = user_transaction.tpv
+                else:
+                    self.raise_user_error('El usuario no tiene configurado punto de Emision')
+                reference = tpv.sequence_sale_note
+                sucursal = company.sucursal
+                emision = tpv.emision
+                tpv.sequence_sale_note = tpv.sequence_sale_note + 1
+                tpv.save()
+                if len(str(reference)) == 1:
+                    reference_end = '00000000' + str(reference)
+                elif len(str(reference)) == 2:
+                    reference_end = '0000000' + str(reference)
+                elif len(str(reference)) == 3:
+                    reference_end = '000000' + str(reference)
+                elif len(str(reference)) == 4:
+                    reference_end = '00000' + str(reference)
+                elif len(str(reference)) == 5:
+                    reference_end = '0000' + str(reference)
+                elif len(str(reference)) == 6:
+                    reference_end = '000' + str(reference)
+                elif len(str(reference)) == 7:
+                    reference_end = '00' + str(reference)
+                elif len(str(reference)) == 8:
+                    reference_end = '0' + str(reference)
+                sale.reference = str(sucursal)+'-'+str(emision)+'-'+reference_end
 
-            if len(str(reference)) == 1:
-                reference_end = '00000000' + str(reference)
-            elif len(str(reference)) == 2:
-                reference_end = '0000000' + str(reference)
-            elif len(str(reference)) == 3:
-                reference_end = '000000' + str(reference)
-            elif len(str(reference)) == 4:
-                reference_end = '00000' + str(reference)
-            elif len(str(reference)) == 5:
-                reference_end = '0000' + str(reference)
-            elif len(str(reference)) == 6:
-                reference_end = '000' + str(reference)
-            elif len(str(reference)) == 7:
-                reference_end = '00' + str(reference)
-            elif len(str(reference)) == 8:
-                reference_end = '0' + str(reference)
+        else:
+            if not sale.reference:
+                if user_transaction.tpv:
+                    tpv = user_transaction.tpv
+                else:
+                    self.raise_user_error('El usuario no tiene configurado punto de Emision')
+                reference = tpv.sequence_sale
+                sucursal = company.sucursal
+                emision = tpv.emision
+                tpv.sequence_sale = tpv.sequence_sale + 1
+                tpv.save()
+                if len(str(reference)) == 1:
+                    reference_end = '00000000' + str(reference)
+                elif len(str(reference)) == 2:
+                    reference_end = '0000000' + str(reference)
+                elif len(str(reference)) == 3:
+                    reference_end = '000000' + str(reference)
+                elif len(str(reference)) == 4:
+                    reference_end = '00000' + str(reference)
+                elif len(str(reference)) == 5:
+                    reference_end = '0000' + str(reference)
+                elif len(str(reference)) == 6:
+                    reference_end = '000' + str(reference)
+                elif len(str(reference)) == 7:
+                    reference_end = '00' + str(reference)
+                elif len(str(reference)) == 8:
+                    reference_end = '0' + str(reference)
+                sale.reference = str(sucursal)+'-'+str(emision)+'-'+reference_end
 
-            sale.reference = str(sucursal)+'-'+str(emision)+'-'+reference_end
         form = self.start
 
         if sale.paid_amount > Decimal(0.0):
@@ -937,8 +1073,20 @@ class WizardSalePayment(Wizard):
         payment.date = Date.today()
         payment.save()
 
-        return 'print_'
-        return'end'
+        if sale.sale_note == True:
+            return 'end'
+        else:
+            if sale.state == 'done':
+                if len (sale.payments) == 1:
+                    return 'print_'
+                    return'end'
+                else:
+                    return 'end'
+            elif len (sale.payments) == 1:
+                return 'print_'
+                return'end'
+            else:
+                return 'end'
 
     def transition_print_(self):
         return 'end'
@@ -1113,6 +1261,13 @@ class ReportSales(Report):
         subtotal14 = Decimal(0.0)
         subtotal0 = Decimal(0.0)
         subtotal12 = Decimal(0.0)
+        totalv = Decimal(0.0)
+        ivav = Decimal(0.0)
+        totalnv = Decimal(0.0)
+        ivanv = Decimal(0.0)
+        subtotal14nv = Decimal(0.0)
+        subtotal0nv = Decimal(0.0)
+        subtotal12nv = Decimal(0.0)
         total_recibido = Decimal(0.0)
         total_por_cobrar = Decimal(0.0)
         ventas_credito = Decimal(0.0)
@@ -1123,8 +1278,14 @@ class ReportSales(Report):
         if sales:
             for s in sales:
                 if s.total_amount > Decimal(0.0):
-                    if s.days > 0:
+                    if s.days > 0 and s.sale_note == False:
                         ventas_credito = s.total_amount
+                    if s.sale_note == True:
+                        totalnv += s.total_amount
+                        ivanv += s.tax_amount
+                    else:
+                        totalv += s.total_amount
+                        ivav += s.tax_amount
 
                     total_ventas += s.total_amount
                     total_iva += s.tax_amount
@@ -1140,11 +1301,20 @@ class ReportSales(Report):
                             impuesto = line.product.taxes
 
                         if impuesto == 'iva0' or impuesto == 'no_iva':
-                            subtotal0= subtotal0 + (line.amount)
+                            if s.sale_note == True:
+                                subtotal0nv = subtotal0nv + line.amount
+                            else:
+                                subtotal0= subtotal0 + (line.amount)
                         if impuesto == 'iva14':
-                            subtotal14= subtotal14 + (line.amount)
+                            if s.sale_note == True:
+                                subtotal14nv = subtotal14nv + line.amount
+                            else:
+                                subtotal14= subtotal14 + (line.amount)
                         if impuesto == 'iva12':
-                            subtotal12= subtotal12 + (line.amount)
+                            if s.sale_note == True:
+                                subtotal12nv = subtotal12nv + line.amount
+                            else:
+                                subtotal12= subtotal12 + (line.amount)
 
         if company.timezone:
             timezone = pytz.timezone(company.timezone)
@@ -1167,6 +1337,12 @@ class ReportSales(Report):
         report_context['subtotal14'] = subtotal14
         report_context['subtotal0'] = subtotal0
         report_context['total_ventas_creditos'] = ventas_credito
+        report_context['totalv'] = totalv
+        report_context['subtotal14nv'] = subtotal14nv
+        report_context['subtotal0nv'] = subtotal0nv
+        report_context['totalnv'] = totalnv
+        report_context['ivav'] = ivav
+        report_context['ivanv'] = ivanv
         return report_context
 
 

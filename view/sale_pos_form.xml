@@ -29,6 +29,10 @@ The COPYRIGHT file at the top level of this repository contains the full copyrig
             <field name="paid_amount"/>
             <label name="residual_amount"/>
             <field name="residual_amount"/>
+            <separator colspan="2" id="note"/>
+            <label name="sale_note"/>
+            <field name="sale_note"/>
+
         </page>
         <page string="Payments" col="2" id="payments">
           <field name="payments" colspan="2"
