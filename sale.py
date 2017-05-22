@@ -28,7 +28,8 @@ import time
 __all__ = ['Sale', 'SaleLine','SalePaymentForm', 'WizardSalePayment',
 'SaleReportPos', 'PrintReportSalesStart', 'PrintReportSales', 'ReportSales',
 'StatementLine', 'SalePaymentReport', 'PrintReportPaymentsStart',
-'PrintReportPayments', 'ReportPayments', 'SequenceSale']
+'PrintReportPayments', 'ReportPayments', 'SequenceSale', 'PrintCloseCashStart',
+'PrintCloseCash', 'CloseCash']
 
 _ZERO = Decimal(0)
 
@@ -116,7 +117,10 @@ class Sale(Workflow, ModelSQL, ModelView):
     payments = fields.One2Many('sale.payments', 'sale', 'Payments', readonly=True)
     price_list = fields.Many2One('product.price_list', 'PriceList')
     sale_note = fields.Boolean('Sale Note', states={
-        'readonly': (Eval('state') != 'draft'),
+        'readonly': (Eval('state') != 'draft') | (Eval('acumulativo', True)),
+    })
+    acumulativo = fields.Boolean('Acumulativo', states={
+        'readonly': (Eval('state') != 'draft') | (Eval('sale_note', True)),
     })
 
     @classmethod
@@ -289,10 +293,19 @@ class Sale(Workflow, ModelSQL, ModelView):
             elif self.party.name.lower() == 'consumidor final':
                 self.days = 0
 
+    @fields.depends('acumulativo', 'party')
+    def on_change_acumulativo(self, name=None):
+        if self.party:
+            if self.party.type_document == '07':
+                self.acumulativo = False
+            elif self.party.vat_number == '9999999999999':
+                self.acumulativo = False
+            elif self.party.name.lower() == 'consumidor final':
+                self.acumulativo = False
+
     def get_tax_amount(self):
         tax = _ZERO
         taxes = _ZERO
-
 
         for line in self.lines:
             if line.type != 'line':
@@ -866,16 +879,22 @@ class WizardSalePayment(Wizard):
         Sale = pool.get('sale.sale')
         sale = Sale(Transaction().context['active_id'])
 
-        if sale.days > 0:
+        if sale.acumulativo == True:
             if sale.residual_amount > Decimal(0.0):
                 payment_amount = sale.residual_amount
             else:
                 payment_amount = Decimal(0.0)
         else:
-            if sale.residual_amount > Decimal(0.0):
-                payment_amount = sale.residual_amount
+            if sale.days > 0:
+                if sale.residual_amount > Decimal(0.0):
+                    payment_amount = sale.residual_amount
+                else:
+                    payment_amount = Decimal(0.0)
             else:
-                payment_amount = sale.total_amount
+                if sale.residual_amount > Decimal(0.0):
+                    payment_amount = sale.residual_amount
+                else:
+                    payment_amount = sale.total_amount
         return {
             'payment_amount': payment_amount,
             'currency_digits': sale.currency_digits,
@@ -1024,33 +1043,35 @@ class WizardSalePayment(Wizard):
                 sale.reference = str(sucursal)+'-'+str(emision)+'-'+reference_end
 
         else:
-            if not sale.reference:
-                if user_transaction.tpv:
-                    tpv = user_transaction.tpv
-                else:
-                    self.raise_user_error('El usuario no tiene configurado punto de Emision')
-                reference = tpv.sequence_sale
-                sucursal = company.sucursal
-                emision = tpv.emision
-                tpv.sequence_sale = tpv.sequence_sale + 1
-                tpv.save()
-                if len(str(reference)) == 1:
-                    reference_end = '00000000' + str(reference)
-                elif len(str(reference)) == 2:
-                    reference_end = '0000000' + str(reference)
-                elif len(str(reference)) == 3:
-                    reference_end = '000000' + str(reference)
-                elif len(str(reference)) == 4:
-                    reference_end = '00000' + str(reference)
-                elif len(str(reference)) == 5:
-                    reference_end = '0000' + str(reference)
-                elif len(str(reference)) == 6:
-                    reference_end = '000' + str(reference)
-                elif len(str(reference)) == 7:
-                    reference_end = '00' + str(reference)
-                elif len(str(reference)) == 8:
-                    reference_end = '0' + str(reference)
-                sale.reference = str(sucursal)+'-'+str(emision)+'-'+reference_end
+            if sale.acumulativo == False:
+                if not sale.reference:
+                    if user_transaction.tpv:
+                        tpv = user_transaction.tpv
+                    else:
+                        self.raise_user_error('El usuario no tiene configurado punto de Emision')
+                    reference = tpv.sequence_sale
+                    sucursal = company.sucursal
+                    emision = tpv.emision
+                    tpv.sequence_sale = tpv.sequence_sale + 1
+                    tpv.save()
+                    if len(str(reference)) == 1:
+                        reference_end = '00000000' + str(reference)
+                    elif len(str(reference)) == 2:
+                        reference_end = '0000000' + str(reference)
+                    elif len(str(reference)) == 3:
+                        reference_end = '000000' + str(reference)
+                    elif len(str(reference)) == 4:
+                        reference_end = '00000' + str(reference)
+                    elif len(str(reference)) == 5:
+                        reference_end = '0000' + str(reference)
+                    elif len(str(reference)) == 6:
+                        reference_end = '000' + str(reference)
+                    elif len(str(reference)) == 7:
+                        reference_end = '00' + str(reference)
+                    elif len(str(reference)) == 8:
+                        reference_end = '0' + str(reference)
+                    sale.reference = str(sucursal)+'-'+str(emision)+'-'+reference_end
+
 
         form = self.start
 
@@ -1067,14 +1088,51 @@ class WizardSalePayment(Wizard):
             sale.state = 'confirmed'
         sale.save()
 
-        payment = Payment()
-        payment.sale = sale
-        payment.amount = form.payment_amount
-        payment.date = Date.today()
-        payment.save()
+        if form.payment_amount > Decimal(0.0):
+            payment = Payment()
+            payment.sale = sale
+            payment.amount = form.payment_amount
+            payment.date = Date.today()
+            payment.save()
 
         if sale.sale_note == True:
             return 'end'
+        elif sale.acumulativo == True:
+            print "Sale.residual_amount", sale.residual_amount, sale.reference
+            if sale.residual_amount > Decimal(0.0):
+                return 'end'
+            else:
+                print "Esta ingresnado aqu"
+                if not sale.reference:
+                    if user_transaction.tpv:
+                        tpv = user_transaction.tpv
+                    else:
+                        self.raise_user_error('El usuario no tiene configurado punto de Emision')
+                    reference = tpv.sequence_sale
+                    sucursal = company.sucursal
+                    emision = tpv.emision
+                    tpv.sequence_sale = tpv.sequence_sale + 1
+                    tpv.save()
+                    if len(str(reference)) == 1:
+                        reference_end = '00000000' + str(reference)
+                    elif len(str(reference)) == 2:
+                        reference_end = '0000000' + str(reference)
+                    elif len(str(reference)) == 3:
+                        reference_end = '000000' + str(reference)
+                    elif len(str(reference)) == 4:
+                        reference_end = '00000' + str(reference)
+                    elif len(str(reference)) == 5:
+                        reference_end = '0000' + str(reference)
+                    elif len(str(reference)) == 6:
+                        reference_end = '000' + str(reference)
+                    elif len(str(reference)) == 7:
+                        reference_end = '00' + str(reference)
+                    elif len(str(reference)) == 8:
+                        reference_end = '0' + str(reference)
+                    sale.reference = str(sucursal)+'-'+str(emision)+'-'+reference_end
+                    sale.save()
+                return 'print_'
+                return 'end'
         else:
             if sale.state == 'done':
                 if len (sale.payments) == 1:
@@ -1450,5 +1508,130 @@ class SalePaymentReport(Report):
 
         report_context['user'] = user
         report_context['company'] = user.company
+
+        return report_context
+
+
+class PrintCloseCashStart(ModelView):
+    'Print Report Close Cash Start'
+    __name__ = 'nodux_sale_one.print_report_close_cash.start'
+
+    company = fields.Many2One('company.company', 'Company', required=True)
+    date = fields.Date("Sale Date", required= True)
+    date_end = fields.Date("Sale Date End", required= True)
+
+    @staticmethod
+    def default_company():
+        return Transaction().context.get('company')
+
+    @staticmethod
+    def default_date():
+        date = Pool().get('ir.date')
+        return date.today()
+
+    @staticmethod
+    def default_date_end():
+        date = Pool().get('ir.date')
+        return date.today()
+
+class PrintCloseCash(Wizard):
+    'Print Close Cash'
+    __name__ = 'nodux_sale_one.print_report_close_cash'
+    start = StateView('nodux_sale_one.print_report_close_cash.start',
+        'nodux_sale_one.print_report_close_cash_start_view_form', [
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Print', 'print_', 'tryton-print', default=True),
+            ])
+    print_ = StateAction('nodux_sale_one.report_close_cash')
+
+    def do_print_(self, action):
+        data = {
+            'company': self.start.company.id,
+            'date' : self.start.date,
+            'date_end' : self.start.date_end,
+            }
+        return action, data
+
+    def transition_print_(self):
+        return 'end'
+
+class CloseCash(Report):
+    __name__ = 'nodux_sale_one.report_close_cash'
+
+    @classmethod
+    def __setup__(cls):
+        super(CloseCash, cls).__setup__()
+
+    @classmethod
+    def get_context(cls, records, data):
+        pool = Pool()
+        User = pool.get('res.user')
+        user = User(Transaction().user)
+        Date = pool.get('ir.date')
+        Company = pool.get('company.company')
+        Sale = pool.get('sale.sale')
+        Purchase = pool.get('purchase.purchase')
+        Payments = pool.get('sale.payments')
+        fecha = data['date']
+        fecha_fin = data['date_end']
+        ventas_efectivo = Decimal(0.0)
+        ventas_acumulativo = Decimal(0.0)
+        total_contado = Decimal(0.0)
+        ventas_credito = Decimal(0.0)
+        c_a_efectivo = Decimal(0.0)
+        efectivo_egreso = Decimal(0.0)
+        total_caja = Decimal(0.0)
+        notas_venta = Decimal(0.0)
+
+        company = Company(data['company'])
+        sales = Sale.search([('sale_date', '>=', fecha), ('sale_date', '<=', fecha_fin), ('state','in', ['done','confirmed'])])
+        purchases = Purchase.search([('purchase_date', '>=', fecha), ('purchase_date', '<=', fecha_fin), ('state', 'in', ['done'])])
+        payments = Payments.search([('date', '>=', fecha), ('date', '<=', fecha_fin), ('amount', '>', 0)])
+
+        if sales:
+            for s in sales:
+                if s.total_amount > Decimal(0.0):
+                    if s.days > 0 and s.sale_note == False:
+                        ventas_credito = s.total_amount
+                    if s.sale_note == True:
+                        notas_venta += s.total_amount
+                    if s.days == 0 and s.sale_note == False and s.acumulativo == False:
+                        ventas_efectivo += s.total_amount
+        if purchases:
+            for p in purchases:
+                efectivo_egreso += p.total_amount
+
+        if payments:
+            for payment in payments:
+                if payment.sale.days > 0 and payment.sale.sale_note==False:
+                    c_a_efectivo += payment.amount
+                if payment.sale.acumulativo == True:
+                    ventas_acumulativo += payment.amount
+
+        if company.timezone:
+            timezone = pytz.timezone(company.timezone)
+            dt = datetime.now()
+            hora = datetime.astimezone(dt.replace(tzinfo=pytz.utc), timezone)
+        else:
+            company.raise_user_error('Configure la zona Horaria de la empresa')
+
+        total_contado = ventas_efectivo + ventas_acumulativo + notas_venta
+        total_caja = (total_contado+c_a_efectivo) -(efectivo_egreso)
+
+        report_context = super(CloseCash, cls).get_context(records, data)
+
+        report_context['company'] = company
+        report_context['fecha'] = fecha.strftime('%d/%m/%Y')
+        report_context['fecha_fin'] = fecha_fin.strftime('%d/%m/%Y')
+        report_context['hora'] = hora.strftime('%H:%M:%S')
+        report_context['fecha_im'] = hora.strftime('%d/%m/%Y')
+        report_context['ventas_efectivo'] = ventas_efectivo
+        report_context['ventas_acumulativo'] = ventas_acumulativo
+        report_context['notas_venta'] = notas_venta
+        report_context['total_contado'] = total_contado
+        report_context['ventas_credito'] = ventas_credito
+        report_context['c_a_efectivo'] = c_a_efectivo
+        report_context['efectivo_egreso'] = efectivo_egreso
+        report_context['total_caja'] = total_caja
 
         return report_context

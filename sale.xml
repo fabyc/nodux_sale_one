@@ -234,6 +234,25 @@ The COPYRIGHT file at the top level of this repository contains the full copyrig
 
         <menuitem parent="menu_sale" action="act_receivable_form"
           sequence="3" id="menu_receivable_form"/>
+          
+        <!--REPORTE CIERRE DE CAJA-->
+        <record model="ir.ui.view" id="print_report_close_cash_start_view_form">
+          <field name="model">nodux_sale_one.print_report_close_cash.start</field>
+          <field name="type">form</field>
+          <field name="name">report_close_cash_start_form</field>
+        </record>
+        <record model="ir.action.wizard" id="wizard_close_cash">
+          <field name="name">Close cash</field>
+          <field name="wiz_name">nodux_sale_one.print_report_close_cash</field>
+        </record>
+        <record model="ir.action.report" id="report_close_cash">
+          <field name="name">Close cash</field>
+          <field name="model"/>
+          <field name="report_name">nodux_sale_one.report_close_cash</field>
+          <field name="report">nodux_sale_one/close_cash.odt</field>
+        </record>
+        <menuitem parent="menu_sale" action="wizard_close_cash"
+          id="menu_close_cash" icon="tryton-print"/>
 
         <!--Group-->
         <record model="res.group" id="group_stock_force">

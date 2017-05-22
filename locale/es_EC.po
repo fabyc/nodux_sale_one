@@ -14,6 +14,22 @@ msgctxt "field:company.company,sucursal:"
 msgid "Sucursal"
 msgstr "Sucursal"
 
+msgctxt "field:nodux_sale_one.print_report_close_cash.start,company:"
+msgid "Company"
+msgstr "Empresa"
+
+msgctxt "field:nodux_sale_one.print_report_close_cash.start,date:"
+msgid "Sale Date"
+msgstr "Fecha Inicio"
+
+msgctxt "field:nodux_sale_one.print_report_close_cash.start,date_end:"
+msgid "Sale Date End"
+msgstr "Fecha Fin"
+
+msgctxt "field:nodux_sale_one.print_report_close_cash.start,id:"
+msgid "ID"
+msgstr "ID"
+
 msgctxt "field:nodux_sale_one.print_report_payment.start,company:"
 msgid "Company"
 msgstr "Empresa"
@@ -230,6 +246,10 @@ msgctxt "field:sale.payments,write_uid:"
 msgid "Write User"
 msgstr "Modificado por Usuario"
 
+msgctxt "field:sale.sale,acumulativo:"
+msgid "Acumulativo"
+msgstr ""
+
 msgctxt "field:sale.sale,comment:"
 msgid "Comment"
 msgstr "Comentario"
@@ -410,6 +430,10 @@ msgctxt "model:ir.action,name:act_sequence_form"
 msgid "Point of Sale"
 msgstr "Punto de Venta"
 
+msgctxt "model:ir.action,name:report_close_cash"
+msgid "Close cash"
+msgstr "Cierre de Caja"
+
 msgctxt "model:ir.action,name:report_payments"
 msgid "Reporte de Pagos"
 msgstr ""
@@ -425,6 +449,10 @@ msgstr "Venta"
 msgctxt "model:ir.action,name:report_sales"
 msgid "Reporte de Ventas"
 msgstr ""
+
+msgctxt "model:ir.action,name:wizard_close_cash"
+msgid "Close cash"
+msgstr "Cierre de Caja"
 
 msgctxt "model:ir.action,name:wizard_payment_report"
 msgid "Reporte de Pagos por Fecha"
@@ -465,6 +493,10 @@ msgctxt ""
 msgid "Quotation"
 msgstr "Cotización"
 
+msgctxt "model:ir.ui.menu,name:menu_close_cash"
+msgid "Close cash"
+msgstr "Cierre de Caja"
+
 msgctxt "model:ir.ui.menu,name:menu_payment_report"
 msgid "Reporte de Pagos por Fecha"
 msgstr ""
@@ -492,6 +524,10 @@ msgstr "Reporte de Ventas por fecha"
 msgctxt "model:ir.ui.menu,name:menu_sale_sequence"
 msgid "Point of Sale"
 msgstr "Punto de Venta"
+
+msgctxt "model:nodux_sale_one.print_report_close_cash.start,name:"
+msgid "Print Report Close Cash Start"
+msgstr ""
 
 msgctxt "model:nodux_sale_one.print_report_payment.start,name:"
 msgid "Print Report Payment Start"
@@ -532,6 +568,122 @@ msgstr "Venta"
 msgctxt "model:sale.sequence,name:"
 msgid "Point of Sale"
 msgstr "Punto de Venta"
+
+msgctxt "report:nodux_sale_one.report_close_cash:"
+msgid "(-)"
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_close_cash:"
+msgid "-"
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_close_cash:"
+msgid "/"
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_close_cash:"
+msgid "CAJA"
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_close_cash:"
+msgid "CIERRE DE CAJA"
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_close_cash:"
+msgid "COBROS Y ABONOS"
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_close_cash:"
+msgid "DETALLE DE CIERRE DE CAJA"
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_close_cash:"
+msgid "DETALLE DE RECAUDACIONES DE CXC"
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_close_cash:"
+msgid "Descripción"
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_close_cash:"
+msgid "FECHA DE IMPRESIÓN:"
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_close_cash:"
+msgid "FECHA:"
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_close_cash:"
+msgid "FLUJO DE EFECTIVO"
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_close_cash:"
+msgid "GASTOS"
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_close_cash:"
+msgid "NOTAS DE VENTA"
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_close_cash:"
+msgid "Nodux Cía. Ltda."
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_close_cash:"
+msgid "PAGOS"
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_close_cash:"
+msgid "PLAN ACUMULATIVO"
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_close_cash:"
+msgid "POR"
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_close_cash:"
+msgid "POR VENTAS A CREDITO"
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_close_cash:"
+msgid "TOTAL"
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_close_cash:"
+msgid "TOTAL DE VENTAS"
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_close_cash:"
+msgid "TOTAL GASTOS"
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_close_cash:"
+msgid "TOTAL VENTAS"
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_close_cash:"
+msgid "Total"
+msgstr "Total"
+
+msgctxt "report:nodux_sale_one.report_close_cash:"
+msgid "VENTAS A CREDITO"
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_close_cash:"
+msgid "VENTAS AL CONTADO"
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_close_cash:"
+msgid "VENTAS EN EFECTIVO"
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_close_cash:"
+msgid "[ PAG."
+msgstr ""
+
+msgctxt "report:nodux_sale_one.report_close_cash:"
+msgid "]"
+msgstr ""
 
 msgctxt "report:nodux_sale_one.report_payments:"
 msgid "-"
@@ -806,19 +958,7 @@ msgid "C.I./"
 msgstr ""
 
 msgctxt "report:sale.sale_pos:"
-msgid "C.I./RUC"
-msgstr ""
-
-msgctxt "report:sale.sale_pos:"
-msgid "C.I./RUC:"
-msgstr ""
-
-msgctxt "report:sale.sale_pos:"
 msgid "COTIZACIÓN"
-msgstr ""
-
-msgctxt "report:sale.sale_pos:"
-msgid "Cant"
 msgstr ""
 
 msgctxt "report:sale.sale_pos:"
@@ -882,10 +1022,6 @@ msgid "P. Unit."
 msgstr ""
 
 msgctxt "report:sale.sale_pos:"
-msgid "Precio"
-msgstr ""
-
-msgctxt "report:sale.sale_pos:"
 msgid "RUC:"
 msgstr ""
 
@@ -895,10 +1031,6 @@ msgstr ""
 
 msgctxt "report:sale.sale_pos:"
 msgid "Sistema"
-msgstr ""
-
-msgctxt "report:sale.sale_pos:"
-msgid "Subt"
 msgstr ""
 
 msgctxt "report:sale.sale_pos:"
@@ -922,14 +1054,6 @@ msgid "Teléfono"
 msgstr ""
 
 msgctxt "report:sale.sale_pos:"
-msgid "Unit"
-msgstr "Unidad"
-
-msgctxt "report:sale.sale_pos:"
-msgid "Unit."
-msgstr ""
-
-msgctxt "report:sale.sale_pos:"
 msgid "_______________"
 msgstr ""
 
@@ -937,7 +1061,6 @@ msgctxt "report:sale.sale_pos:"
 msgid "________________"
 msgstr ""
 
-#, fuzzy
 msgctxt "report:sale.sale_pos:"
 msgid "c"
 msgstr "c"
@@ -969,6 +1092,10 @@ msgstr "Cotización"
 msgctxt "view:company.company:"
 msgid "Configuration Sale"
 msgstr "Configuración de Venta"
+
+msgctxt "view:nodux_sale_one.print_report_close_cash.start:"
+msgid "Print Close Cash"
+msgstr "Imprimir Cierre de Caja"
 
 msgctxt "view:nodux_sale_one.print_report_payment.start:"
 msgid "Print Salesman Report "
@@ -1073,6 +1200,14 @@ msgstr "Pagar"
 msgctxt "view:sale.sequence:"
 msgid "Point of Sale"
 msgstr "Punto de Venta"
+
+msgctxt "wizard_button:nodux_sale_one.print_report_close_cash,start,end:"
+msgid "Cancel"
+msgstr "Cancelar"
+
+msgctxt "wizard_button:nodux_sale_one.print_report_close_cash,start,print_:"
+msgid "Print"
+msgstr "Imprimir"
 
 msgctxt "wizard_button:nodux_sale_one.print_report_payment,start,end:"
 msgid "Cancel"
