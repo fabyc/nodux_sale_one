@@ -117,7 +117,7 @@ class Sale(Workflow, ModelSQL, ModelView):
     payments = fields.One2Many('sale.payments', 'sale', 'Payments', readonly=True)
     price_list = fields.Many2One('product.price_list', 'PriceList')
     sale_note = fields.Boolean('Sale Note', states={
-        'readonly': (Eval('state') != 'draft') | (Eval('acumulativo', True)),
+        'readonly': (Eval('state') != 'draft'),
     })
     acumulativo = fields.Boolean('Acumulativo', states={
         'readonly': (Eval('state') != 'draft') | (Eval('sale_note', True)),
@@ -1592,7 +1592,7 @@ class CloseCash(Report):
             for s in sales:
                 if s.total_amount > Decimal(0.0):
                     if s.days > 0 and s.sale_note == False:
-                        ventas_credito = s.total_amount
+                        ventas_credito += s.total_amount
                     if s.sale_note == True:
                         notas_venta += s.total_amount
                     if s.days == 0 and s.sale_note == False and s.acumulativo == False:
