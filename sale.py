@@ -143,6 +143,7 @@ class Sale(Workflow, ModelSQL, ModelView):
                 ('quotation', 'confirmed'),
                 ('quotation', 'done'),
                 ('confirmed', 'done'),
+                ('confirmed', 'anulled'),
                 ('done', 'anulled'),
                 ))
 
@@ -156,7 +157,7 @@ class Sale(Workflow, ModelSQL, ModelView):
                     'readonly': ~Eval('lines', []),
                     },
                 'anull': {
-                    'invisible': (Eval('state').in_(['draft', 'anulled', 'confirm'])),
+                    'invisible': (Eval('state').in_(['draft', 'anulled', 'quotation'])),
                     'readonly': Not(Bool(Eval('lines'))),
                     },
                 })
